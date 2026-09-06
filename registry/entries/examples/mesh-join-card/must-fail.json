@@ -1,0 +1,59 @@
+{
+  "kind": "must_fail",
+  "expected": {
+    "record_schema_valid": false,
+    "verify_ok": true,
+    "notes": "hardware_inventory.chip missing (required by the entry's schema) and measurement_rung set to an unregistered token -- MUST fail record-schema validation. AAC's generic capsule verify still reports ok=true (card content is Home-2 semantics, invisible to Home-1's mechanics), which is exactly why this registry entry's own schema has to catch it."
+  },
+  "record": {
+    "spec_version": "draft-mih-scitt-agent-action-capsule-04",
+    "format_version": "4",
+    "capsule_id": "a4194c592e3b191862cf09579058901bf1de474289c740c17fcf5662d49ab7c5",
+    "action_id": "mesh-poc/card/mesh-node-demo-1/f7bcc69b-bf80-4606-aab6-1cfad954fbab",
+    "action_type": "fyi",
+    "operator": "op",
+    "developer": "dev",
+    "timestamp": "2026-09-05T00:00:00Z",
+    "canonicalization_id": "jcs",
+    "domain": "action",
+    "provenance": "collector",
+    "model_attestation": {
+      "compute_attestation": {
+        "x-mesh-join-card-v1": {
+          "card": {
+            "schema": "mesh-join-card/1",
+            "node_id": "mesh-node-demo-1",
+            "hardware_inventory": {
+              "source": "os_reported",
+              "capture_method": "system_profiler",
+              "grade": "os_measured",
+              "memory_bytes": 42949672960
+            },
+            "models": [
+              {
+                "name": "meta/Llama-3.2-3B",
+                "weights_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              }
+            ],
+            "measurement_rung": "trust-me-bro",
+            "announcement_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "supersedes": null
+          },
+          "card_digest": "030aa03a8bfcc55b59f154ae707a02688f8d901ebe5072bed8f7fb7d5cfb39fe",
+          "not_a_score": "A self-report of what this node currently claims to serve, not a trust rating or routing recommendation."
+        }
+      }
+    },
+    "assurance": {
+      "attestation_mode": "self_attested",
+      "effect_mode": "not_applicable",
+      "ledger_mode": "standalone"
+    },
+    "disposition": {
+      "decision": "accept",
+      "approver": "policy",
+      "human_disposed": false,
+      "verdict_class": "executed"
+    }
+  }
+}

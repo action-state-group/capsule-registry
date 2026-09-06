@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "capsule-registry (Home-2) Registry Entry",
+  "description": "Machine-checkable shape for one Home-2 semantics filing. Fill in registry/entries/TEMPLATE.yaml, save it as registry/entries/<name>.yaml, add its record schema under registry/schemas/<name>.schema.json and its example records under registry/entries/examples/<name>/{positive,boundary,must-fail}.json, then open a PR. .github/validate_registry_entries.py validates this file against this schema, validates each declared example's extracted record against the entry's own record schema, runs each example's full capsule through agent-action-capsule verify, and rejects the entry if any of those checks doesn't match the example's declared `expected` block. This is the machine-checkable half of REGISTRATION-POLICY.md; that document remains the normative prose description of the lifecycle. Ported from scitt-payload-binding's CPB registry filing tooling (PR #77, branch head e136bf8, itself HELD pending Steven+Anton ratification as of the port) -- see PROVENANCE.md for the exact source commit and what changed for Home-2's own ruling.",
+  "type": "object",
+  "required": ["name", "kind", "status", "owner", "reference", "record_schema", "examples_dir", "verifier_expectations", "open_questions"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "The controlled identifier this entry registers. Lowercase, hyphen-separated. Matches the entry file's own name (registry/entries/<name>.yaml) and its examples directory (registry/entries/examples/<name>/)."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["slot-profile", "action-type", "outcome", "purpose-label", "pack", "record-schema"],
+      "description": "Which REGISTRY.md reserved section (or, for record-schema, which future section) this entry targets. record-schema is for a capsule subject-block shape with its own closed vocabulary (e.g. a mesh card) that doesn't reduce to a single slot-profile/action-type/outcome/purpose-label/pack value."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["provisional", "promoted"],
+      "description": "REGISTRATION-POLICY.md's two-state lifecycle. There is no Designated Expert ladder in Home-2 (unlike CPB's Home-1) -- promotion is Steven's (or the spec-tier gate's, once delegated) per-entry ruling, never a batch operation and never inferred from a sibling entry's promotion."
+    },
+    "owner": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "affiliation": {"type": "string"},
+        "github": {"type": "string"}
+      },
+      "description": "Who is asserting this convention -- the repo/team whose code or spec text this entry is filing from."
+    },
+    "reference": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Where this convention actually lives: a repository reference MUST carry a commit hash (a branch or tag alone is not a pin) plus a path, e.g. 'action-state-group/capsule-emit-mesh @ <full-commit-hash> -- join_card.py'."
+    },
+    "home1_reference": {
+      "type": ["string", "null"],
+      "description": "The CPB (Home-1) Artifact Type / Algorithm entry, or its provisional-registry entry, that carries this name's Digest Context table -- cited BY NAME, never duplicated (REGISTRY.md's within-entry rule). null when this entry has no mechanical counterpart registered or provisional in CPB yet -- that is an honest 'nothing to cite' per REGISTRY.md, not an error, but should be named in open_questions if one is expected to appear later."
+    },
+    "record_schema": {
+      "type": "object",
+      "required": ["path", "record_path"],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^registry/schemas/.+\\.schema\\.json$",
+          "description": "Path, relative to the repository root, to this entry's declared JSON Schema. Validates the SEMANTIC content only -- vocabulary, closed enums, producer invariants -- never a Digest Context table (that is Home-1's job, cited via home1_reference)."
+        },
+        "record_path": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "The key path, inside an example's full capsule (`record` in the example file), locating the semantic subject block the schema above validates. An empty array means the whole `record` value IS the subject (no capsule envelope to unwrap)."
+        }
+      }
+    },
+    "closed_enums": {
+      "type": "array",
+      "description": "Every closed enum this entry registers, with its values' meanings spelled out (REGISTRATION-POLICY.md requires an entry name its semantic content, not just point at code). Optional only for a kind that genuinely has no enum (e.g. a pack namespace claim).",
+      "items": {
+        "type": "object",
+        "required": ["name", "values"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["value", "meaning"],
+              "properties": {
+                "value": {"type": "string"},
+                "meaning": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      }
+    },
+    "verifier_expectations": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What grade/state a conforming example yields when run through `agent-action-capsule verify` (Steven's 2026-09-05 ruling: examples are validating records run through the reference verifier, not CPB-style digest fixtures). State the expected `ok` value and any expected finding codes/severities in prose -- .github/validate_registry_entries.py checks the machine-readable `expected` block inside each example file, not this prose, but a human reviewer needs the prose to judge whether the machine-readable expectation is the RIGHT one."
+    },
+    "examples_dir": {
+      "type": "string",
+      "pattern": "^registry/entries/examples/",
+      "description": "Path, relative to the repository root, to this entry's examples. Must contain positive.json, boundary.json, and must-fail.json (Registration Rule: two-sided coverage, mirroring CPB's positive/negative discipline, plus a boundary case). Each file is {kind, expected: {record_schema_valid, verify_ok, notes}, record: <the example capsule or bare record>}."
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Every unresolved question this entry still carries. Required key (may be an empty array) so a reviewer never has to infer whether something was simply forgotten versus deliberately left open. Never filled in by a CPB/AAC editor on the filer's behalf."
+    },
+    "promoted_by": {
+      "type": "string",
+      "description": "Required when status=promoted: 'Steven / spec-tier ruling, <date>'. Omit entirely for a provisional entry."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-text notes -- non-normative."
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "promoted"}}, "required": ["status"]},
+      "then": {"required": ["promoted_by"]}
+    },
+    {
+      "if": {"properties": {"status": {"const": "provisional"}}, "required": ["status"]},
+      "then": {"not": {"required": ["promoted_by"]}}
+    }
+  ]
+}

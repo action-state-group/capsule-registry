@@ -1,0 +1,51 @@
+{
+  "kind": "positive",
+  "expected": {
+    "record_schema_valid": true,
+    "verify_ok": true,
+    "notes": "verdict=corroborated over two distinct-owner twin halves -- validates and grades ok."
+  },
+  "record": {
+    "spec_version": "draft-mih-scitt-agent-action-capsule-04",
+    "format_version": "4",
+    "capsule_id": "e58542997a000fb7173eb7573676dde6fc6fe60e5eee25782daea9eeeae5c7f6",
+    "action_id": "adjudicate/0e8f285a-c105-43bf-9c34-30703e0b75ef",
+    "action_type": "decide",
+    "operator": "op",
+    "developer": "dev",
+    "timestamp": "2026-09-05T00:00:00Z",
+    "canonicalization_id": "jcs",
+    "model_attestation": {
+      "compute_attestation": {
+        "adjudication": {
+          "schema": "capsule-emit/adjudication/v1",
+          "source": "twin_comparison",
+          "capture_method": "deterministic_replay",
+          "verdict": "corroborated",
+          "divergence_index": null,
+          "margin": "1",
+          "margin_tau": "0.9",
+          "twin_owner_distinct": true,
+          "weights_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "half_a_capsule_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "half_b_capsule_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    },
+    "assurance": {
+      "attestation_mode": "self_attested",
+      "effect_mode": "not_applicable",
+      "ledger_mode": "chained"
+    },
+    "disposition": {
+      "decision": "accept",
+      "approver": "policy",
+      "human_disposed": false,
+      "verdict_class": "assessed"
+    },
+    "chain": {
+      "parent_capsule_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "relation": "adjudicates"
+    }
+  }
+}

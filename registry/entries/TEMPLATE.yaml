@@ -1,0 +1,124 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# CAPSULE-REGISTRY (HOME-2) ENTRY — FILL-IN TEMPLATE
+#
+# Copy this file to registry/entries/<name>.yaml (the same <name> you put in
+# the `name:` field below) and fill in every field. Delete these header
+# comments and the inline `#` guidance comments once you're done.
+#
+# What happens next: open a PR adding this file, plus:
+#   - registry/schemas/<name>.schema.json   -- the JSON Schema your record_schema
+#     field points at (semantic content only -- vocabulary, closed enums,
+#     producer invariants; NEVER a Digest Context table, see home1_reference).
+#   - registry/entries/examples/<name>/{positive,boundary,must-fail}.json  --
+#     three example records, each shaped
+#       {"kind": "positive"|"boundary"|"must_fail",
+#        "expected": {"record_schema_valid": bool, "verify_ok": bool, "notes": str},
+#        "record": <the example capsule, or the bare record if there's no
+#                   capsule envelope to unwrap -- see record_schema.record_path>}
+#
+# CI (.github/workflows/registry-entries.yml) runs
+# .github/validate_registry_entries.py, which:
+#   1. Validates this file against registry/entry.schema.json.
+#   2. For every example under examples_dir: extracts the record at
+#      record_schema.record_path, validates it against your declared
+#      record_schema.path, and runs the example's full `record` through
+#      `agent-action-capsule verify`. Both actual outcomes are compared
+#      against the example's own declared `expected` block --  a mismatch is
+#      a hard CI failure, INCLUDING a must_fail example that unexpectedly
+#      passes (Steven's 2026-09-05 ruling: examples are validating records
+#      graded through the reference verifier, not CPB-style digest fixtures
+#      -- this is the Home-2 analog of CPB's check_vectors.py MUST-FAIL
+#      discipline).
+#
+# That gets this entry to `provisional`. Promotion past `provisional` is
+# Steven's (or the spec-tier gate's, once delegated) PER-ENTRY ruling --
+# REGISTRATION-POLICY.md. This template does not shortcut that, only the
+# mechanical parts before it. NO entry here promotes by virtue of a sibling
+# entry's promotion, and there is no ≥2-organization Designated Expert panel
+# in Home-2 (unlike CPB's Home-1) unless and until a second organization
+# files a semantics entry.
+#
+# CPB's own three differences from the mechanism this file mirrors (Steven,
+# 2026-09-05): (1) "vectors" here are EXAMPLE RECORDS graded by the reference
+# verifier, not digest fixtures; (2) promotion is Steven's per-entry ruling,
+# not a DE panel; (3) no IANA-forwarding clause -- AAC-04 creates no IANA
+# registry for Home-2 content, and none is implied here.
+
+# ---------------------------------------------------------------------------
+# Identity
+# ---------------------------------------------------------------------------
+
+# The controlled identifier this entry registers (lowercase, hyphen-separated).
+name: your-entry-name
+
+# One of: slot-profile | action-type | outcome | purpose-label | pack | record-schema
+#   slot-profile   — a registered WHO/CAN/DID/AUDIT(+WHAT) composition profile.
+#   action-type    — a controlled action_type vocabulary value/family.
+#   outcome        — a controlled outcome/verdict/effect-type value and its
+#                     meaning for a verifier reading a composed record.
+#   purpose-label  — a cross-profile purpose label at the WHAT slot's
+#                     self-reference binding.
+#   pack           — a publisher namespace claim, pack definition, fold
+#                     envelope, or adapter/implementation conformance listing.
+#   record-schema  — a capsule subject-block shape with its own closed
+#                     vocabulary that doesn't reduce to one of the above
+#                     (e.g. a mesh card).
+kind: record-schema
+
+# One of: provisional | promoted. Always start here as provisional -- no
+# entry may declare itself promoted; that line is added BY the ruling, not
+# by the filer.
+status: provisional
+
+owner:
+  name: "Owner or organization name"
+  affiliation: "Owner's organization"
+  github: "owner-github-handle"          # optional
+
+# Where this convention actually lives. A repository reference MUST carry a
+# commit hash -- a branch or tag alone is not a pin.
+reference: "owner-org/owner-repo @ <full-commit-hash> — path/to/source.py"
+
+# The CPB (Home-1) entry (by name) that carries this name's Digest Context
+# table, if one exists -- cited BY NAME, never duplicated (REGISTRY.md's
+# within-entry rule). null if there is nothing to cite yet.
+home1_reference: null
+
+# ---------------------------------------------------------------------------
+# The semantic content
+# ---------------------------------------------------------------------------
+
+record_schema:
+  # Path to the JSON Schema (registry/schemas/<name>.schema.json) that
+  # validates this entry's semantic content. Semantic content ONLY --
+  # canonicalization, digest algorithm, and byte width are Home-1's job.
+  path: "registry/schemas/your-entry-name.schema.json"
+  # Key path, inside an example's full `record`, locating the subject block
+  # the schema above validates. Empty list if `record` IS the subject.
+  record_path: []
+
+# Every closed enum this entry registers, values named with their meanings.
+closed_enums:
+  - name: "your_field_name"
+    values:
+      - value: "example_value"
+        meaning: "TBD — what a verifier should conclude when it sees this value"
+
+# What grade/state a CONFORMING example yields when run through
+# `agent-action-capsule verify` -- prose a human reviewer checks the
+# examples' machine-readable `expected` blocks against.
+verifier_expectations: >
+  TBD — e.g. "ok: true, with an informational unknown_registry_value finding
+  for the not-yet-seeded chain.relation value; never a rejection."
+
+# Path to this entry's examples (positive.json, boundary.json, must-fail.json).
+examples_dir: "registry/entries/examples/your-entry-name"
+
+# Every unresolved question a reviewer or the owner still needs to settle
+# before this entry can promote. Empty list only when there truly are none.
+open_questions:
+  - "TBD — example: should this closed enum admit a third value for <case>?"
+
+# Non-normative notes for the reviewer.
+notes: ""

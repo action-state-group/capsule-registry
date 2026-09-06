@@ -1,0 +1,51 @@
+{
+  "kind": "boundary",
+  "expected": {
+    "record_schema_valid": true,
+    "verify_ok": true,
+    "notes": "verdict=inconclusive with weights_digest honestly absent (stubbed pending [E5], never fabricated as a placeholder) -- the boundary the verdict enum's third shape exists for."
+  },
+  "record": {
+    "spec_version": "draft-mih-scitt-agent-action-capsule-04",
+    "format_version": "4",
+    "capsule_id": "9993d7ae13d84ef529fb7c740e1919a469c71f2854bd6ef56fa08cf01a5f55d7",
+    "action_id": "adjudicate/6e666a96-b8d9-4b35-a7bb-a4565b457c15",
+    "action_type": "decide",
+    "operator": "op",
+    "developer": "dev",
+    "timestamp": "2026-09-05T00:00:00Z",
+    "canonicalization_id": "jcs",
+    "model_attestation": {
+      "compute_attestation": {
+        "adjudication": {
+          "schema": "capsule-emit/adjudication/v1",
+          "source": "twin_comparison",
+          "capture_method": "deterministic_replay",
+          "verdict": "inconclusive",
+          "divergence_index": 17,
+          "margin": "0.42",
+          "margin_tau": "0.9",
+          "twin_owner_distinct": null,
+          "weights_digest": null,
+          "half_a_capsule_id": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "half_b_capsule_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        }
+      }
+    },
+    "assurance": {
+      "attestation_mode": "self_attested",
+      "effect_mode": "not_applicable",
+      "ledger_mode": "chained"
+    },
+    "disposition": {
+      "decision": "accept",
+      "approver": "policy",
+      "human_disposed": false,
+      "verdict_class": "assessed"
+    },
+    "chain": {
+      "parent_capsule_id": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "relation": "adjudicates"
+    }
+  }
+}

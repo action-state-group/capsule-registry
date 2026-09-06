@@ -1,0 +1,72 @@
+name: mesh-history-card
+kind: record-schema
+status: provisional
+
+owner:
+  name: "Action State Group"
+  affiliation: "action-state-group/capsule-emit-mesh"
+  github: "action-state-group"
+
+reference: "action-state-group/capsule-emit-mesh @ HEAD (see PROVENANCE.md for the exact commit pinned at filing time) — history_card.py"
+
+# No CPB (Home-1) artifact-type or algorithm entry exists for mesh-history-card
+# yet. Nothing to cite.
+home1_reference: null
+
+record_schema:
+  path: "registry/schemas/mesh-history-card.schema.json"
+  record_path: ["model_attestation", "compute_attestation", "x-mesh-history-v1", "history"]
+
+closed_enums:
+  - name: "derivation.properties.unforked"
+    values:
+      - value: "true"
+        meaning: "No fork/rewrite/gap was found anywhere in the requested [since_size, latest] range."
+      - value: "false"
+        meaning: "A fork, rewrite, or gap was found somewhere in the requested range; derivation.properties.continuity names where."
+
+verifier_expectations: >
+  ok: true. Like mesh-join-card, the history object's fields are Home-2
+  semantics invisible to AAC's generic Class-1 checks -- a schema-conforming
+  history card always grades ok through agent-action-capsule verify
+  regardless of whether its continuity/unforked/checkpoint_count content is
+  internally honest, which is exactly the gap history_card.verify_history_card
+  and this entry's own record_schema exist to close (respectively: does the
+  chain cryptographically verify; does the shape/vocabulary conform). No
+  unknown_registry_value findings are expected -- this entry's fields are not
+  registered chain.relation/effect.type/disposition values.
+
+examples_dir: "registry/entries/examples/mesh-history-card"
+
+open_questions:
+  - "derivation.properties.continuity is free text today ('unbroken', 'no
+     checkpoints since the requested size', or a 'broken at mmr_size=<N>:
+     <reason>' prefix) -- should this become a registered closed set with a
+     fixed prefix grammar for the broken case, rather than free text? This
+     entry's record_schema currently only requires non-empty string."
+  - "A real (non-empty) history card's derivation.properties.cadence carries
+     span_seconds/mean_interval_seconds/etc as JSON floats when computed by
+     the real history_card.py path over >=2 checkpoints in range -- this trips
+     agent_action_capsule.canonical.FloatInDigestError once digest-bearing,
+     the same class of bug adjudication.py's margin/margin_tau fields were
+     already fixed for (exact-decimal-string encoding, RFC 8785 §3.2.2.3).
+     Discovered while generating this entry's positive example (had to pick
+     a since_size that keeps only one checkpoint in range to avoid it, since
+     a single-checkpoint cadence returns int-only {'checkpoints': N}). This
+     is a capsule-emit-mesh code bug, out of this spec-lane task's scope to
+     fix -- flagging here so the owning lane can file it. Not a Home-2
+     schema question, but the example construction it produced (see
+     scripts/generate_examples.py's since_size choice) IS visible in this
+     entry and should not be mistaken for the general case."
+  - "Should mesh-history-card file its own CPB Home-1 provisional entry for
+     the checkpoint-chain digest construction (mmr root / consistency proof
+     inputs), given it already exists mechanically in capsule_emit.checkpoint?
+     home1_reference stays null until this is settled."
+
+notes: >
+  Provisional filing only. Positive example uses a REAL 3-checkpoint chain
+  built through checkpointing.CheckpointState (same COSE-wire consistency-
+  proof path capsule-emit-mesh's own tests exercise), with since_size chosen
+  to keep exactly one checkpoint in range (see open_questions above for why).
+  Boundary example is the real "honestly-empty log" case (checkpoint_lines=[]).
+  See scripts/generate_examples.py.

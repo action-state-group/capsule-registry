@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "adjudication verdict — record schema (Home-2 semantics)",
+  "description": "Validates the `adjudication` object carried at model_attestation.compute_attestation.adjudication of a sealed capsule (capsule-emit adjudication.py). Fixes the closed set of verdict SHAPES this outcome convention registers: corroborated | inconclusive | contradicted:<owner_id>. The capsule's chain.relation='adjudicates' value and disposition.verdict_class='assessed' are cited by this same entry (see mesh-inference-exchange-style Home-1/Home-2 split notes in adjudication-verdict.yaml) but are not independently schema-checked here -- the verdict field is this entry's registered vocabulary.",
+  "type": "object",
+  "required": ["schema", "source", "capture_method", "verdict"],
+  "additionalProperties": true,
+  "properties": {
+    "schema": {"const": "capsule-emit/adjudication/v1"},
+    "source": {"const": "twin_comparison"},
+    "capture_method": {"const": "deterministic_replay"},
+    "verdict": {
+      "type": "string",
+      "pattern": "^(corroborated|inconclusive|contradicted:.+)$",
+      "description": "Closed set of SHAPES (not literal values for 'contradicted', which carries an owner_id suffix): 'corroborated', 'inconclusive', or 'contradicted:<owner_id>' with a non-empty owner_id."
+    },
+    "divergence_index": {"type": ["integer", "null"], "minimum": 0},
+    "margin": {"type": "string", "description": "Exact decimal string (RFC 8785 §3.2.2.3) -- never a JSON float in this digest-bearing field."},
+    "margin_tau": {"type": "string", "description": "Exact decimal string, same rule as margin."},
+    "twin_owner_distinct": {"type": ["boolean", "null"]},
+    "weights_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "half_a_capsule_id": {"type": "string"},
+    "half_b_capsule_id": {"type": "string"}
+  }
+}

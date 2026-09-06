@@ -1,0 +1,55 @@
+{
+  "kind": "boundary",
+  "expected": {
+    "record_schema_valid": true,
+    "verify_ok": true,
+    "notes": "Node with an empty served-model list at the lowest measurement rung (reported) -- an honest not-yet-serving node, not an error."
+  },
+  "record": {
+    "spec_version": "draft-mih-scitt-agent-action-capsule-04",
+    "format_version": "4",
+    "capsule_id": "c4744d2fe782d570aad5d634ab1cbaf8e83c2039b638d82cc5d03fec93e30b3c",
+    "action_id": "mesh-poc/card/mesh-node-demo-2/4f95990d-c824-4fa8-8e66-ddb6c865903b",
+    "action_type": "fyi",
+    "operator": "op",
+    "developer": "dev",
+    "timestamp": "2026-09-05T00:00:00Z",
+    "canonicalization_id": "jcs",
+    "domain": "action",
+    "provenance": "collector",
+    "model_attestation": {
+      "compute_attestation": {
+        "x-mesh-join-card-v1": {
+          "card": {
+            "schema": "mesh-join-card/1",
+            "node_id": "mesh-node-demo-2",
+            "hardware_inventory": {
+              "source": "os_reported",
+              "capture_method": "system_profiler",
+              "grade": "reported",
+              "chip": "unknown",
+              "memory_bytes": 0
+            },
+            "models": [],
+            "measurement_rung": "reported",
+            "announcement_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "supersedes": null
+          },
+          "card_digest": "71f9c543363830e6a28c732dc0bb50c4e923af80dd8073b7445945661f90c5e7",
+          "not_a_score": "A self-report of what this node currently claims to serve, not a trust rating or routing recommendation."
+        }
+      }
+    },
+    "assurance": {
+      "attestation_mode": "self_attested",
+      "effect_mode": "not_applicable",
+      "ledger_mode": "standalone"
+    },
+    "disposition": {
+      "decision": "accept",
+      "approver": "policy",
+      "human_disposed": false,
+      "verdict_class": "executed"
+    }
+  }
+}

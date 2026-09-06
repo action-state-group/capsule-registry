@@ -1,0 +1,60 @@
+{
+  "kind": "positive",
+  "expected": {
+    "record_schema_valid": true,
+    "verify_ok": true,
+    "notes": "Node join card with one served model at os_measured rung; validates and grades ok."
+  },
+  "record": {
+    "spec_version": "draft-mih-scitt-agent-action-capsule-04",
+    "format_version": "4",
+    "capsule_id": "09b42b5b6683251bd7e4d7764716ba89453b49e769aeb7fc1d9934616b022aa9",
+    "action_id": "mesh-poc/card/mesh-node-demo-1/f7bcc69b-bf80-4606-aab6-1cfad954fbab",
+    "action_type": "fyi",
+    "operator": "op",
+    "developer": "dev",
+    "timestamp": "2026-09-05T00:00:00Z",
+    "canonicalization_id": "jcs",
+    "domain": "action",
+    "provenance": "collector",
+    "model_attestation": {
+      "compute_attestation": {
+        "x-mesh-join-card-v1": {
+          "card": {
+            "schema": "mesh-join-card/1",
+            "node_id": "mesh-node-demo-1",
+            "hardware_inventory": {
+              "source": "os_reported",
+              "capture_method": "system_profiler",
+              "grade": "os_measured",
+              "chip": "Apple M4 Max",
+              "memory_bytes": 42949672960
+            },
+            "models": [
+              {
+                "name": "meta/Llama-3.2-3B",
+                "weights_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              }
+            ],
+            "measurement_rung": "os_measured",
+            "announcement_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "supersedes": null
+          },
+          "card_digest": "030aa03a8bfcc55b59f154ae707a02688f8d901ebe5072bed8f7fb7d5cfb39fe",
+          "not_a_score": "A self-report of what this node currently claims to serve, not a trust rating or routing recommendation."
+        }
+      }
+    },
+    "assurance": {
+      "attestation_mode": "self_attested",
+      "effect_mode": "not_applicable",
+      "ledger_mode": "standalone"
+    },
+    "disposition": {
+      "decision": "accept",
+      "approver": "policy",
+      "human_disposed": false,
+      "verdict_class": "executed"
+    }
+  }
+}
