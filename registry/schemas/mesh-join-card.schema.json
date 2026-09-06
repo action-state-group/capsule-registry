@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mesh-join-card/1 — record schema (Home-2 semantics)",
+  "description": "Validates the `card` object carried at model_attestation.compute_attestation['x-mesh-join-card-v1'].card of a sealed capsule (capsule-emit-mesh join_card.py). This schema covers ONLY the semantic content of the card -- the mechanical capsule envelope around it (capsule_id, signature, canonicalization) is Home-1/CPB's concern and is checked by agent-action-capsule verify, not here.",
+  "type": "object",
+  "required": ["schema", "node_id", "hardware_inventory", "models", "measurement_rung", "announcement_digest"],
+  "additionalProperties": true,
+  "properties": {
+    "schema": {"const": "mesh-join-card/1"},
+    "node_id": {"type": "string", "minLength": 1},
+    "hardware_inventory": {
+      "type": "object",
+      "required": ["source", "capture_method", "grade", "chip", "memory_bytes"],
+      "properties": {
+        "source": {"type": "string", "minLength": 1},
+        "capture_method": {"type": "string", "minLength": 1},
+        "grade": {"type": "string", "minLength": 1},
+        "chip": {"type": "string", "minLength": 1},
+        "memory_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "weights_digest"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "weights_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "measurement_rung": {
+      "type": "string",
+      "enum": ["reported", "os_measured"],
+      "description": "Closed set (open_questions in mesh-join-card.yaml flags whether a third rung is needed): 'reported' (self-reported, unverified) or 'os_measured' (captured via an OS-level measurement path, e.g. system_profiler)."
+    },
+    "announcement_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "supersedes": {"type": ["string", "null"]}
+  }
+}

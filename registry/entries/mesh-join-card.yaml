@@ -1,0 +1,67 @@
+name: mesh-join-card
+kind: record-schema
+status: provisional
+
+owner:
+  name: "Action State Group"
+  affiliation: "action-state-group/capsule-emit-mesh"
+  github: "action-state-group"
+
+reference: "action-state-group/capsule-emit-mesh @ HEAD (see PROVENANCE.md for the exact commit pinned at filing time) — join_card.py"
+
+# No CPB (Home-1) artifact-type or algorithm entry exists for mesh-join-card
+# yet -- it is a mesh-sidecar subject-block convention, not (yet) filed in
+# scitt-payload-binding's registries. Nothing to cite (REGISTRY.md's
+# within-entry rule: an entry with no mechanical counterpart omits this line
+# in prose form; the machine-checkable form is `null`).
+home1_reference: null
+
+record_schema:
+  path: "registry/schemas/mesh-join-card.schema.json"
+  record_path: ["model_attestation", "compute_attestation", "x-mesh-join-card-v1", "card"]
+
+closed_enums:
+  - name: "measurement_rung"
+    values:
+      - value: "reported"
+        meaning: "Self-reported by the node, unverified by any external measurement path."
+      - value: "os_measured"
+        meaning: "Captured via an OS-level measurement path (e.g. system_profiler) -- stronger than a bare self-report, still not a hardware attestation."
+
+verifier_expectations: >
+  ok: true. The card's own fields (hardware_inventory, models[], measurement_rung,
+  announcement_digest) are Home-2 semantics invisible to AAC's generic Class-1
+  checks, so a card with a schema-conforming shape always grades ok through
+  agent-action-capsule verify regardless of its content -- that is exactly why
+  this entry's own record_schema (not the reference verifier) is what catches
+  a malformed card. No unknown_registry_value findings are expected for this
+  entry's own fields (the card subject block is not itself a registered
+  chain.relation/effect.type/disposition value); the two chain-adjacent
+  values (`supersedes` relation used on a later card, `x-mesh-join-card-v1`
+  subject key) are namespaced under the card's own schema tag rather than
+  AAC's checked registries, so they never generate a §12 finding either way.
+
+examples_dir: "registry/entries/examples/mesh-join-card"
+
+open_questions:
+  - "Is 'reported' vs 'os_measured' the complete rung set, or does a future
+     hardware-attestation-backed rung belong here too (e.g. a TEE-anchored
+     measurement)? mesh-join-card.schema.json's measurement_rung enum would
+     need a third value if so."
+  - "Should this entry file a CPB Home-1 provisional artifact-type entry for
+     mesh-join-card's OWN digest context (the announcement_digest /
+     card_digest construction), or does that stay purely a Home-2 concern
+     because the card is never independently anchored, only carried inside
+     an already-registered AAC capsule? home1_reference stays null until
+     this is settled."
+  - "hardware_inventory.chip and .memory_bytes are free-form strings/ints
+     today; is a controlled hardware taxonomy (chip family, GPU class)
+     in scope for a future closed_enums entry, or is that deliberately left
+     open-vocabulary?"
+
+notes: >
+  Provisional filing only -- see [capsule-registry-home2-mirror-cpb-tooling]'s
+  outbox note for the promotion-ruling checklist. Example records generated
+  via the REAL build_card()/seal_card() helpers (not hand-typed), then
+  verified through agent-action-capsule verify at filing time -- see
+  scripts/generate_examples.py.

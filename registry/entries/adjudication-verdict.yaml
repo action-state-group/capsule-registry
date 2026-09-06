@@ -1,0 +1,84 @@
+name: adjudication-verdict
+kind: outcome
+status: provisional
+
+owner:
+  name: "Action State Group"
+  affiliation: "action-state-group/capsule-emit"
+  github: "action-state-group"
+
+reference: "action-state-group/capsule-emit @ HEAD (see PROVENANCE.md for the exact commit pinned at filing time) — capsule_emit/adjudication.py"
+
+# No CPB (Home-1) artifact-type or algorithm entry exists for the
+# adjudication verdict convention -- it is an AAC compute_attestation /
+# chain.relation convention, not a CPB canonicalization/digest construction.
+# Nothing to cite.
+home1_reference: null
+
+record_schema:
+  path: "registry/schemas/adjudication-verdict.schema.json"
+  record_path: ["model_attestation", "compute_attestation", "adjudication"]
+
+closed_enums:
+  - name: "verdict"
+    values:
+      - value: "corroborated"
+        meaning: "The two compared twin halves' transcripts agreed within the published margin_tau threshold."
+      - value: "inconclusive"
+        meaning: "The comparison could not be resolved to agreement or disagreement (e.g. margin fell short of margin_tau without a clean divergence) -- first-class, never treated as an error or as agreement."
+      - value: "contradicted:<owner_id>"
+        meaning: "The referee's forward pass found the named owner_id's half diverged from the tiebreak -- a detection label, never an accusation the capsule's signature proves more than 'this is what the referee returned'."
+  - name: "chain.relation (this capsule's own value)"
+    values:
+      - value: "adjudicates"
+        meaning: "This capsule's chain.parent_capsule_id names one of the two compared halves (half_a); the other half (half_b) is cited inside compute_attestation.adjudication.half_b_capsule_id, never a second chain link."
+  - name: "disposition.verdict_class (this capsule's own value)"
+    values:
+      - value: "assessed"
+        meaning: "A detection disposition -- never 'executed'/'confirmed' -- signaling this capsule asserts a finding about two other capsules, not an action outcome of its own."
+
+verifier_expectations: >
+  ok: true, with three expected informational findings: check 6
+  chain_check_store_level (chain parent-existence is a store-level check, not
+  run standalone), and two check 8 unknown_registry_value findings for
+  chain.relation='adjudicates' and disposition.verdict_class='assessed' --
+  both are Home-2 conventions AAC's seeded registries don't yet know about,
+  informational per §12, never rejected. The verdict field itself
+  (compute_attestation.adjudication.verdict) is invisible to AAC's generic
+  checks entirely -- catching a non-conforming verdict string is this entry's
+  own record_schema's job (see the must-fail example, which the real
+  seal_adjudication() helper's _validate_verdict already refuses to
+  construct at the source -- this schema is the check for a producer that
+  bypassed it).
+
+examples_dir: "registry/entries/examples/adjudication-verdict"
+
+open_questions:
+  - "Should chain.relation='adjudicates' and disposition.verdict_class='assessed'
+     be split into their own action-type/outcome entries independent of this
+     one, since they're capsule-wide fields rather than part of the
+     adjudication subject block itself? Filed together here for now because
+     they only ever co-occur with an adjudication capsule; open to a Steven
+     ruling to split them."
+  - "twin_owner_distinct and weights_digest are both nullable/absent by
+     design (capture_method honesty discipline) -- should absence itself be
+     a documented closed 'meaning' (e.g. 'weights_digest omitted: E5 not yet
+     landed, never fabricated as a placeholder') rather than left to prose
+     in adjudication.py's docstring?"
+  - "Is this the right registry (outcome) for a verdict that is really a
+     comparison-of-two-capsules relation, or does it belong under a future
+     relation-vocabulary section not yet named in REGISTRY.md's reserved
+     sections list? Filed as kind=outcome per the task's own candidate
+     framing; flagging the classification itself as open."
+
+notes: >
+  Provisional filing only. Example records generated via the REAL
+  seal_adjudication() helper (not hand-typed) for positive/boundary; the
+  must-fail example hand-mutates a REAL sealed capsule's verdict field to a
+  value seal_adjudication()'s own _validate_verdict would refuse to
+  construct, simulating a non-conforming producer. See
+  scripts/generate_examples.py. The generated capsule.signature/key_id
+  fields are stripped after a post-seal timestamp normalization (needed for
+  reproducible fixtures) would otherwise leave a signature that fails to
+  verify against the mutated bytes; AAC's Class-1 verify does not require a
+  present signature for a self_attested/standalone capsule, so ok stays true.

@@ -1,0 +1,81 @@
+{
+  "kind": "boundary",
+  "expected": {
+    "record_schema_valid": true,
+    "verify_ok": true,
+    "notes": "Honestly-empty card: no checkpoints exist yet since the requested size. continuity/unforked still hold meaningful values (never null/omitted) for a log with no history yet."
+  },
+  "record": {
+    "spec_version": "draft-mih-scitt-agent-action-capsule-04",
+    "format_version": "4",
+    "capsule_id": "e91149e6dd2d0e24e26cbc7357fdd74da6ba492c83c83081f935cdc7748f59f5",
+    "action_id": "mesh-poc/history/mesh-node-demo-2/f2beb841-5a9c-477b-ae25-d42df34144ae",
+    "action_type": "fyi",
+    "operator": "op",
+    "developer": "dev",
+    "timestamp": "2026-09-05T00:00:00Z",
+    "canonicalization_id": "jcs",
+    "domain": "action",
+    "provenance": "collector",
+    "model_attestation": {
+      "compute_attestation": {
+        "x-mesh-history-v1": {
+          "history": {
+            "schema": "mesh-history-card/1",
+            "node_id": "mesh-node-demo-2",
+            "log_id": "log-demo-2",
+            "selection": {
+              "since_size": 0,
+              "from_checkpoint": null,
+              "to_checkpoint": null,
+              "note": "checkpoints_only -- digests-only tier: checkpoint roots and entry digests only, no capsule content, no per-record (per-capsule) digests"
+            },
+            "derivation": {
+              "kind": "history_chain_walk",
+              "definition_digest": "0927816813f9986f2b1724b4459225108dce6be4813d6b76bb0761171bbc0768",
+              "properties": {
+                "continuity": "no checkpoints since the requested size",
+                "history_depth": 0,
+                "unforked": true,
+                "cadence": {}
+              },
+              "note": "structural properties of the checkpoint chain since size S; an ACCOUNT of continuity, not a score. The relying party computes its own predicate."
+            },
+            "coverage": {
+              "checkpoint_count": 0,
+              "witnesses": [],
+              "witnessed": false
+            },
+            "peer_reconciliation": {
+              "reconciled_with": 0,
+              "forks_observed": 0,
+              "note": "peer count and fork count from this node's own checkpoint-root observation store, not from this log's checkpoint chain -- see reconciliation_counts_from_ledger_dir()"
+            },
+            "references": {
+              "asked": 0,
+              "answered": 0,
+              "adjudications_about_x": {},
+              "ack_refusals_about_x": 0,
+              "note": "counts from live-asking a SAMPLE of this card's own counterparties (discovery mechanism 1, [mesh-ask-the-references]) about a DIFFERENT node's history -- never derived from this log's own checkpoint chain, never a score; refusals are counted, never inferred from"
+            },
+            "not_a_score": "This is an account of structural facts about the checkpoint chain, not a score or routing recommendation."
+          },
+          "history_digest": "4ef74d8753f0ab1598e2585f4b94df28a46ae2b644a38310bfdc8ebdac1bda6a",
+          "coverage_ordering": "Sealing this card appends a ledger entry, so this capsule's own position is covered by the NEXT checkpoint, not the range in `selection` (which ends at the checkpoint BEFORE this seal). A history card never summarizes a range that includes itself.",
+          "not_a_score": "Structural properties of a checkpoint chain, not a score or routing recommendation."
+        }
+      }
+    },
+    "assurance": {
+      "attestation_mode": "self_attested",
+      "effect_mode": "not_applicable",
+      "ledger_mode": "standalone"
+    },
+    "disposition": {
+      "decision": "accept",
+      "approver": "policy",
+      "human_disposed": false,
+      "verdict_class": "executed"
+    }
+  }
+}

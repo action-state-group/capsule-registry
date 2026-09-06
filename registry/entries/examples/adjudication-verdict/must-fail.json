@@ -1,0 +1,51 @@
+{
+  "kind": "must_fail",
+  "expected": {
+    "record_schema_valid": false,
+    "verify_ok": true,
+    "notes": "verdict='probably' is outside the closed set {corroborated, inconclusive, contradicted:<owner_id>} -- MUST fail record-schema validation. The real seal_adjudication() helper refuses this at call time (_validate_verdict); this example simulates a non-conforming producer that bypassed it, which is exactly the case this registry entry's schema exists to catch downstream."
+  },
+  "record": {
+    "spec_version": "draft-mih-scitt-agent-action-capsule-04",
+    "format_version": "4",
+    "capsule_id": "21de87a4bbebf42570d5062b3ed6ba5b04c669b1186c47b86d346e2a0e426006",
+    "action_id": "adjudicate/0e8f285a-c105-43bf-9c34-30703e0b75ef",
+    "action_type": "decide",
+    "operator": "op",
+    "developer": "dev",
+    "timestamp": "2026-09-05T00:00:00Z",
+    "canonicalization_id": "jcs",
+    "model_attestation": {
+      "compute_attestation": {
+        "adjudication": {
+          "schema": "capsule-emit/adjudication/v1",
+          "source": "twin_comparison",
+          "capture_method": "deterministic_replay",
+          "verdict": "probably",
+          "divergence_index": null,
+          "margin": "1",
+          "margin_tau": "0.9",
+          "twin_owner_distinct": true,
+          "weights_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "half_a_capsule_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "half_b_capsule_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    },
+    "assurance": {
+      "attestation_mode": "self_attested",
+      "effect_mode": "not_applicable",
+      "ledger_mode": "chained"
+    },
+    "disposition": {
+      "decision": "accept",
+      "approver": "policy",
+      "human_disposed": false,
+      "verdict_class": "assessed"
+    },
+    "chain": {
+      "parent_capsule_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "relation": "adjudicates"
+    }
+  }
+}

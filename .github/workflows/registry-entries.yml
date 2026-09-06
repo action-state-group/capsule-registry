@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: Apache-2.0
+# Validate registry/entries/*.yaml against registry/entry.schema.json, and
+# mechanically grade every declared example record through
+# agent-action-capsule verify. See registry/README.md for what this buys a
+# registrant, and .github/validate_registry_entries.py for exactly what is
+# and isn't checked.
+#
+# Plain push/pull_request triggers, NOT the fork-safe pull_request_target
+# pattern CPB's own registry-entries.yml uses -- this repository is PRIVATE
+# free-tier (no environments, no required-check API, no public fork
+# contributions to defend against). If/when this repo flips public, revisit
+# this workflow against CPB's fork-safe version (see PROVENANCE.md) before
+# accepting outside PRs.
+name: registry-entries
+
+on:
+  push:
+    paths: ["registry/**", ".github/validate_registry_entries.py", ".github/test_validate_registry_entries.py", ".github/workflows/registry-entries.yml"]
+  pull_request:
+    paths: ["registry/**", ".github/validate_registry_entries.py", ".github/test_validate_registry_entries.py", ".github/workflows/registry-entries.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: install validator dependencies
+        run: |
+          pip install "jsonschema>=4" "pyyaml>=6" "pytest>=7"
+          # Pinned to the commit recorded in PROVENANCE.md -- bump both
+          # together, never drift them apart.
+          pip install "agent-action-capsule @ git+https://github.com/action-state-group/agent-action-capsule.git@bb648e15d4826ff78e7d71eb4f3cc87ec5e6713c#subdirectory=python"
+
+      - name: validator self-tests (mutation-tested -- see test_validate_registry_entries.py)
+        run: python3 -m pytest .github/test_validate_registry_entries.py -v
+
+      - name: validate registry/entries
+        run: python3 .github/validate_registry_entries.py

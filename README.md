@@ -6,9 +6,11 @@
 Action Capsule (AAC) ecosystem — the record of what capsule fields and
 conventions *mean*, as opposed to how they are canonicalized and digested.
 
-> **Status.** Pre-flip. This repository is currently **private** and holds
-> only the registry skeleton and governing policy — no entries. The public
-> flip is a separate, later decision.
+> **Status.** Pre-flip. This repository is currently **private**. It holds
+> the registry skeleton, governing policy, and a machine-checkable filing
+> mechanism ([`registry/README.md`](registry/README.md)) with three
+> `provisional` example filings — see [`registry/entries/`](registry/entries/).
+> **No entry is promoted.** The public flip is a separate, later decision.
 
 ## Two registry homes, split by layer
 
@@ -43,7 +45,7 @@ See [`REGISTRY.md`](REGISTRY.md) for the full entry format and the reserved
 registry sections, and [`REGISTRATION-POLICY.md`](REGISTRATION-POLICY.md) for
 how an entry moves from provisional to promoted.
 
-## No entries here yet
+## Provisional filings, none promoted
 
 This repository is activation, not migration. No semantic content has moved
 from CPB's provisional registry into this repository. An entry that
@@ -51,3 +53,10 @@ currently incubates whole in
 [`scitt-payload-binding/spec/cpb-provisional-registry.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/spec/cpb-provisional-registry.md)
 stays there, unsplit, until it receives its own promotion ruling — see
 `REGISTRATION-POLICY.md`.
+
+Three `provisional` entries exist under [`registry/entries/`](registry/entries/)
+as worked examples of the machine-checkable filing mechanism
+([`registry/README.md`](registry/README.md)) ported from CPB's Home-1
+registry tooling (see [`PROVENANCE.md`](PROVENANCE.md)). None of them are
+promoted, and none promote by virtue of this filing — each carries its own
+`open_questions` a promotion ruling would need to settle.

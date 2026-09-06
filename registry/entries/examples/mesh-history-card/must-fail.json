@@ -1,0 +1,95 @@
+{
+  "kind": "must_fail",
+  "expected": {
+    "record_schema_valid": false,
+    "verify_ok": true,
+    "notes": "coverage.checkpoint_count is negative and derivation.properties.unforked is a string instead of a boolean -- MUST fail record-schema validation. AAC's generic verify still reports ok=true."
+  },
+  "record": {
+    "spec_version": "draft-mih-scitt-agent-action-capsule-04",
+    "format_version": "4",
+    "capsule_id": "a3f51d6ae7830968ca3a4e4712be54ca38ad3f2cdc366386cfeed1e9321e014a",
+    "action_id": "mesh-poc/history/mesh-node-demo-1/018fcd32-7206-46b6-8e3a-ee7d7501181e",
+    "action_type": "fyi",
+    "operator": "op",
+    "developer": "dev",
+    "timestamp": "2026-09-05T00:00:00Z",
+    "canonicalization_id": "jcs",
+    "domain": "action",
+    "provenance": "collector",
+    "model_attestation": {
+      "compute_attestation": {
+        "x-mesh-history-v1": {
+          "history": {
+            "schema": "mesh-history-card/1",
+            "node_id": "mesh-node-demo-1",
+            "log_id": "log-demo-1",
+            "selection": {
+              "since_size": 7,
+              "from_checkpoint": {
+                "mmr_size": 7,
+                "root": "3e7e49f95c852c7b49ea05eb4b88c94c81ffcda9187406e7384a699503e815c0",
+                "entry_digest": "ab09db8e6f76335c142eb86be983518e9c9d88309b52335efc5627cfe08c36f2",
+                "timestamp": "2026-09-06T03:44:35.035852Z"
+              },
+              "to_checkpoint": {
+                "mmr_size": 10,
+                "root": "6e345f77719cfeafb7bc9ba8ff1fd4cc2ae277dcc8087fb2c0917071d2cd12b8",
+                "entry_digest": "52c7e25abda2c6952be100240b4f0bfd5793d4361d752436008d01b448babfc9",
+                "timestamp": "2026-09-06T03:44:35.036527Z"
+              },
+              "note": "checkpoints_only -- digests-only tier: checkpoint roots and entry digests only, no capsule content, no per-record (per-capsule) digests"
+            },
+            "derivation": {
+              "kind": "history_chain_walk",
+              "definition_digest": "0927816813f9986f2b1724b4459225108dce6be4813d6b76bb0761171bbc0768",
+              "properties": {
+                "continuity": "unbroken",
+                "history_depth": 1,
+                "unforked": "yes",
+                "cadence": {
+                  "checkpoints": 1
+                }
+              },
+              "note": "structural properties of the checkpoint chain since size S; an ACCOUNT of continuity, not a score. The relying party computes its own predicate."
+            },
+            "coverage": {
+              "checkpoint_count": -1,
+              "witnesses": [
+                "https://fake-ts.example"
+              ],
+              "witnessed": true
+            },
+            "peer_reconciliation": {
+              "reconciled_with": 0,
+              "forks_observed": 0,
+              "note": "peer count and fork count from this node's own checkpoint-root observation store, not from this log's checkpoint chain -- see reconciliation_counts_from_ledger_dir()"
+            },
+            "references": {
+              "asked": 0,
+              "answered": 0,
+              "adjudications_about_x": {},
+              "ack_refusals_about_x": 0,
+              "note": "counts from live-asking a SAMPLE of this card's own counterparties (discovery mechanism 1, [mesh-ask-the-references]) about a DIFFERENT node's history -- never derived from this log's own checkpoint chain, never a score; refusals are counted, never inferred from"
+            },
+            "not_a_score": "This is an account of structural facts about the checkpoint chain, not a score or routing recommendation."
+          },
+          "history_digest": "11fc262048031b66f968723c85675cef91e493268c046b904d020625cffbe7cd",
+          "coverage_ordering": "Sealing this card appends a ledger entry, so this capsule's own position is covered by the NEXT checkpoint, not the range in `selection` (which ends at the checkpoint BEFORE this seal). A history card never summarizes a range that includes itself.",
+          "not_a_score": "Structural properties of a checkpoint chain, not a score or routing recommendation."
+        }
+      }
+    },
+    "assurance": {
+      "attestation_mode": "self_attested",
+      "effect_mode": "not_applicable",
+      "ledger_mode": "standalone"
+    },
+    "disposition": {
+      "decision": "accept",
+      "approver": "policy",
+      "human_disposed": false,
+      "verdict_class": "executed"
+    }
+  }
+}

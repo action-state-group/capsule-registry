@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mesh-history-card/1 — record schema (Home-2 semantics)",
+  "description": "Validates the `history` object carried at model_attestation.compute_attestation['x-mesh-history-v1'].history of a sealed capsule (capsule-emit-mesh history_card.py). Covers ONLY the semantic content -- the cryptographic chain-walk (consistency proofs, COSE-wire checkpoints) is verified offline by history_card.verify_history_card, not re-checked here; this schema only fixes the SHAPE and the closed vocab of `continuity`/`unforked`.",
+  "type": "object",
+  "required": ["schema", "node_id", "log_id", "selection", "derivation", "coverage"],
+  "additionalProperties": true,
+  "properties": {
+    "schema": {"const": "mesh-history-card/1"},
+    "node_id": {"type": "string", "minLength": 1},
+    "log_id": {"type": "string", "minLength": 1},
+    "selection": {
+      "type": "object",
+      "required": ["since_size", "from_checkpoint", "to_checkpoint"],
+      "properties": {
+        "since_size": {"type": "integer", "minimum": 0},
+        "from_checkpoint": {"type": ["object", "null"]},
+        "to_checkpoint": {"type": ["object", "null"]}
+      }
+    },
+    "derivation": {
+      "type": "object",
+      "required": ["kind", "definition_digest", "properties"],
+      "properties": {
+        "kind": {"const": "history_chain_walk"},
+        "definition_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "properties": {
+          "type": "object",
+          "required": ["continuity", "history_depth", "unforked"],
+          "properties": {
+            "continuity": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Not a closed enum -- carries a variable 'broken at mmr_size=<N>: <reason>' message on failure (open_questions flags whether 'unbroken' / 'no checkpoints since the requested size' / a 'broken at ...' prefix should become the registered closed set)."
+            },
+            "history_depth": {"type": "integer", "minimum": 0},
+            "unforked": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["checkpoint_count", "witnesses", "witnessed"],
+      "properties": {
+        "checkpoint_count": {"type": "integer", "minimum": 0},
+        "witnesses": {"type": "array", "items": {"type": "string"}},
+        "witnessed": {"type": "boolean"}
+      }
+    }
+  }
+}
