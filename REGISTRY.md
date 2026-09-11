@@ -30,7 +30,7 @@ takes this shape:
 or to its provisional-registry entry, that carries this name's Digest
 Context table>
 **Status:** provisional | promoted
-**Promoted by:** <Steven / spec-tier ruling, date> — provisional entries omit this line
+**Promoted by:** <Registry Editor ruling, date> — provisional entries omit this line
 
 <Semantic content: vocabulary, purpose, producer invariants, outcome
 conventions. NEVER a Digest Context table — that table lives at the

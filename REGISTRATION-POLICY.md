@@ -27,19 +27,28 @@ provisional  →  promoted
   Context content — but has not yet received a promotion ruling. A
   provisional entry is *proposed*, not registered: nothing in this registry
   verifies against it, and no verifier is entitled to rely on it.
-- **`promoted`.** An entry Steven (or, once delegated, the spec-tier gate)
-  has ruled on, per entry. Promotion is a **per-entry ruling, not a batch
-  operation** — an entry does not become `promoted` by virtue of a sibling
-  entry's promotion, and a pull request proposing more than one entry gets
-  more than one ruling.
+- **`promoted`.** An entry the **Registry Editor** — this registry's
+  spec-tier gate — has ruled on, per entry. Promotion is a **per-entry
+  ruling, not a batch operation** — an entry does not become `promoted` by
+  virtue of a sibling entry's promotion, and a pull request proposing more
+  than one entry gets more than one ruling.
 
 There is no Designated Expert ladder here, unlike CPB's Home-1 registry.
-Home-2's registration authority is Steven's ruling (or the spec-tier gate,
-once this repository's governance is formally delegated) — not an open
-third-party-documented / owner-confirmed rung system. This is a deliberate
-simplification: Home-1's ladder exists because IANA eventually inherits that
-registry and needs an auditable provenance trail for entries it did not
-write; Home-2 records ecosystem convention, not IANA-bound registrations.
+Home-2's registration authority is the **Registry Editor** role — not an
+open third-party-documented / owner-confirmed rung system, and not any named
+individual's standing authority. This is a deliberate simplification:
+Home-1's ladder exists because IANA eventually inherits that registry and
+needs an auditable provenance trail for entries it did not write; Home-2
+records ecosystem convention, not IANA-bound registrations.
+
+**Change controller: Action State Group, Inc. (interim).** Home-2 is not
+IANA-bound, so there is no RFC-publication handoff of the kind Home-1
+states — that would misdescribe this registry. The stated succession is:
+on donation of this registry to a neutral foundation home (the same
+donation path stated in the Agent Action Capsule project's
+[`GOVERNANCE.md`](https://github.com/action-state-group/agent-action-capsule/blob/main/GOVERNANCE.md)),
+change control transfers to that home. Until then, Action State Group, Inc.
+holds change control, exercised through the Registry Editor role.
 
 ## What a promotion ruling requires
 

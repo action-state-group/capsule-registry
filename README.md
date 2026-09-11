@@ -6,9 +6,11 @@
 Action Capsule (AAC) ecosystem — the record of what capsule fields and
 conventions *mean*, as opposed to how they are canonicalized and digested.
 
-> **Status.** Pre-flip. This repository is currently **private** and holds
-> only the registry skeleton and governing policy — no entries. The public
-> flip is a separate, later decision.
+> **Status.** Public, skeleton plus policy — **no entries yet**. This
+> repository holds the registry structure and registration policy; entries
+> arrive by per-entry ruling under [`REGISTRATION-POLICY.md`](REGISTRATION-POLICY.md),
+> not on a schedule. Nothing here should be read as the registry already
+> operating — it isn't, until its first entry is promoted.
 
 ## Two registry homes, split by layer
 
