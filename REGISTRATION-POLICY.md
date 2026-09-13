@@ -114,9 +114,10 @@ This registry does not depend on the continued existence of its custodian.
   a record it cannot rewrite.
 - Its state is plain files in a public git repository. Any party can hold a
   complete copy today.
-- **Every entry cites the registrant's own repository at a commit hash.** If
-  this copy became unavailable, the registered conventions remain resolvable
-  from the parties who own them.
+- **Every entry declares its source** — either a commit-pinned external
+  reference, which stays resolvable from the party that owns it, or an
+  explicit declaration that the convention originates here, in which case it
+  travels with this registry under its license.
 
 These are properties a reader can check, not undertakings this project asks to
 be trusted on. The succession statement above says who is expected to carry

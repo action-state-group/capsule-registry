@@ -30,6 +30,7 @@ takes this shape:
 or to its provisional-registry entry, that carries this name's Digest
 Context table>
 **Status:** provisional | promoted
+**Source:** a commit-pinned external reference — `owner-org/owner-repo @ <full-commit-hash>`, an I-D revision, or an RFC — or the literal `originates in this registry` for a convention with no external source. A branch or tag alone is not a pin; both can move after the fact.
 **Promoted by:** <Registry Editor ruling, date> — provisional entries omit this line
 
 <Semantic content: vocabulary, purpose, producer invariants, outcome
@@ -39,7 +40,11 @@ Home-1 reference above and is cited, not copied.>
 
 An entry with no mechanical counterpart (e.g. a pack, a publisher
 namespace claim) omits the `Home-1 reference` line entirely — there is
-nothing to cite.
+nothing to cite. The `Source` line is never omitted: an entry with no
+external source declares `originates in this registry`, so every entry
+states its provenance either way. The `Home-1 reference`, when present,
+is an internal cross-link to CPB's digest-context content, not this
+provenance pin — the two are distinct lines.
 
 ---
 
