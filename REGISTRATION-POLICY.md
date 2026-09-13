@@ -14,6 +14,12 @@ never covers algorithms, digest contexts, or canonicalization profiles —
 that is CPB's Home-1 policy, in
 [`scitt-payload-binding/REGISTRY.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/REGISTRY.md).
 
+A purpose label registered here is one belonging to the composition model's
+own slot bindings. A purpose vocabulary that is a registered member of
+another profile's wire format registers with that profile —
+`citation_purpose` is a member of the Agent Action Capsule profile and
+registers in that profile's registry, not here.
+
 ## Entry lifecycle
 
 Entries move through exactly two states:
@@ -33,6 +39,11 @@ provisional  →  promoted
   virtue of a sibling entry's promotion, and a pull request proposing more
   than one entry gets more than one ruling.
 
+A promoted entry is immutable in meaning. If a convention changes, a new
+entry is registered; a promoted entry's registered semantics are never
+modified retroactively. A bibliographic correction or a lifecycle status
+transition is not a change of meaning.
+
 There is no Designated Expert ladder here, unlike CPB's Home-1 registry.
 Home-2's registration authority is the **Registry Editor** role — not an
 open third-party-documented / owner-confirmed rung system, and not any named
@@ -42,13 +53,33 @@ needs an auditable provenance trail for entries it did not write; Home-2
 records ecosystem convention, not IANA-bound registrations.
 
 **Change controller: Action State Group, Inc. (interim).** Home-2 is not
-IANA-bound, so there is no RFC-publication handoff of the kind Home-1
-states — that would misdescribe this registry. The stated succession is:
-on donation of this registry to a neutral foundation home (the same
-donation path stated in the Agent Action Capsule project's
+IANA-bound *today*, so there is no present RFC-publication handoff of the
+kind Home-1 states — claiming one now would misdescribe this registry. That
+is a present-tense fact with a named condition, not a permanent property:
+the composition slot profiles and cross-profile purpose labels back an
+Internet-Draft that reserves the right to propose a slot-identifier registry
+in a later revision; if it does, those sections become that document's
+interim registry of record and follow it to IANA on publication, exactly as
+the Agent Action Capsule profile's registry does. The pack schema and
+`pack_id` namespace have no standards-track document and remain here in
+every case. (The Agent Action Capsule ↔ TRACE citation work now under way is
+itself cross-document coordination of the kind that eventually calls for
+that registry.)
+
+The stated succession is: on donation of this registry to a neutral
+foundation home (the same donation path stated in the Agent Action Capsule
+project's
 [`GOVERNANCE.md`](https://github.com/action-state-group/agent-action-capsule/blob/main/GOVERNANCE.md)),
 change control transfers to that home. Until then, Action State Group, Inc.
 holds change control, exercised through the Registry Editor role.
+
+If Action State Group, Inc. transfers, merges, is acquired, or ceases to
+operate before that donation, change control passes to a successor that
+maintains this registry under the same license and the same policy. Absent
+such a successor, the license governs and any party may fork and continue
+it. In every case a registered identifier keeps its registered meaning: **no
+successor and no fork may reuse a registered identifier for different
+semantics.**
 
 ## What a promotion ruling requires
 
@@ -72,3 +103,22 @@ split by default when this policy activates. It stays whole, in place, in
 CPB's provisional registry, until it receives its own promotion ruling. On
 that ruling, the Digest Context table stays in CPB (Home-1); the semantic
 content is what routes here.
+
+## Continuity
+
+This registry does not depend on the continued existence of its custodian.
+
+- It is Apache-2.0. No transfer, dissolution, or change of steward can remove
+  its contents from the ecosystem.
+- Promoted entries are immutable in meaning, so a successor or a fork inherits
+  a record it cannot rewrite.
+- Its state is plain files in a public git repository. Any party can hold a
+  complete copy today.
+- **Every entry declares its source** — either a commit-pinned external
+  reference, which stays resolvable from the party that owns it, or an
+  explicit declaration that the convention originates here, in which case it
+  travels with this registry under its license.
+
+These are properties a reader can check, not undertakings this project asks to
+be trusted on. The succession statement above says who is expected to carry
+it; these say why the record survives regardless.
