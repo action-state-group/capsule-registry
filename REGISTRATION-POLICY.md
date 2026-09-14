@@ -10,9 +10,18 @@ lifecycle. It does not yet accept registrations — see
 This policy covers Home-2 content only: composition slot profiles,
 action-type conventions, outcome conventions, cross-profile purpose labels,
 and the pack ecosystem (publishers, packs, fold envelopes, adapters). It
-never covers algorithms, digest contexts, or canonicalization profiles —
-that is CPB's Home-1 policy, in
-[`scitt-payload-binding/REGISTRY.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/REGISTRY.md).
+never covers algorithms, digest contexts, or canonicalization profiles.
+Algorithm/canonicalization-token content is CPB's Home-1 policy (see
+[`scitt-payload-binding/REGISTRY.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/REGISTRY.md)
+for its live Canonicalization Algorithm Registry section); artifact-type and
+digest-context content is profile-owned under CPB-04 and its citation
+target is not yet settled — see
+[`README.md`](README.md#two-registry-homes-split-by-layer) for the full
+restatement and the open NEEDS-STEVEN.
+
+For why this registry exists as a **third** home distinct from CPB's Home-1
+and from the Agent Action Capsule profile's own `spec/REGISTRY.md`, see
+[`README.md`](README.md#why-a-third-registry--the-axis-that-separates-it-from-aacs-own).
 
 A purpose label registered here is one belonging to the composition model's
 own slot bindings. A purpose vocabulary that is a registered member of
@@ -88,10 +97,13 @@ A promotion ruling names, per entry:
 1. The entry's semantic content (vocabulary, purpose, producer invariants,
    outcome conventions — never a Digest Context table; see the within-entry
    rule in `README.md`).
-2. Its Home-1 citation, if the entry has a mechanical counterpart already
-   registered or provisional in CPB's registries — a Home-2 entry MUST cite
-   Home-1 by reference for any digest-context content it depends on, never
-   restate it.
+2. Its citation to whichever registry actually owns the entry's mechanical
+   counterpart, if it has one — CPB's Home-1 Canonicalization Algorithm
+   Registry for an algorithm/token, or the owning profile's own normative
+   registry for an artifact-type/digest-context declaration (CPB-04 creates
+   no artifact-type registry of its own; see `README.md`). A Home-2 entry
+   MUST cite that source by reference for any such content it depends on,
+   never restate it.
 3. The reserved section it activates or extends (see `REGISTRY.md`).
 
 ## No entries migrate without a per-entry ruling
@@ -101,8 +113,10 @@ An entry that exists today in CPB's provisional registry
 Digest Context table and semantic content in the same entry — is **not**
 split by default when this policy activates. It stays whole, in place, in
 CPB's provisional registry, until it receives its own promotion ruling. On
-that ruling, the Digest Context table stays in CPB (Home-1); the semantic
-content is what routes here.
+that ruling, the Digest Context table does **not** route here in any case —
+it stays wherever it normatively belongs (CPB's provisional registry today;
+see `README.md` for the open question of whether that is its lasting home
+under CPB-04). Only the semantic content routes here.
 
 ## Continuity
 

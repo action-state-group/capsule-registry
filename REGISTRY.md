@@ -7,44 +7,53 @@ for how a section moves from reserved to accepting entries, and for how an
 individual entry moves from `provisional` to `promoted`.
 
 This registry never records algorithms, digest contexts, or
-canonicalization profiles. That is CPB's Home-1 registry, in
-[`scitt-payload-binding/REGISTRY.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/REGISTRY.md).
+canonicalization profiles, under any reading. Canonicalization-algorithm
+material is CPB's Home-1 registry, in
+[`scitt-payload-binding/REGISTRY.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/REGISTRY.md)
+(its live Canonicalization Algorithm Registry section). Artifact-type and
+digest-context material is, under CPB-04, profile-owned rather than a CPB
+registry — its citation target is not yet settled; see
+[`README.md`](README.md#two-registry-homes-split-by-layer) for the full
+restatement and the open NEEDS-STEVEN.
 
 ## Entry format — the within-entry rule
 
 Every entry in this registry follows one rule, stated in full in
 [`README.md`](README.md#two-registry-homes-split-by-layer):
 
-> **An entry's Digest Context table is Home-1 (CPB) content, always cited by
-> reference from here, never duplicated.** Everything else that gives the
-> entry's fields their agreed meaning is Home-2 content and is registered
-> here.
+> **An entry's Digest Context table is never Home-2 content — it is always
+> cited by reference, never duplicated, from whichever registry actually
+> owns it** (CPB's Home-1 Canonicalization Algorithm Registry for an
+> algorithm/token; the owning profile's own registry for an artifact-type or
+> digest-context declaration, since CPB-04 creates no artifact-type registry
+> of its own). Everything else that gives the entry's fields their agreed
+> meaning is Home-2 content and is registered here.
 
-Concretely, an entry that has a mechanical counterpart in CPB's registries
-takes this shape:
+Concretely, an entry that has a mechanical counterpart takes this shape:
 
 ```
 ### `<name>`
 
-**Home-1 reference:** <link to the CPB Artifact Type / Algorithm entry,
-or to its provisional-registry entry, that carries this name's Digest
-Context table>
+**Digest-context reference:** <link to whichever registry normatively owns
+this name's Digest Context table — CPB's Home-1 Canonicalization Algorithm
+Registry entry, a CPB provisional-registry entry, or the owning profile's
+own registry>
 **Status:** provisional | promoted
 **Source:** a commit-pinned external reference — `owner-org/owner-repo @ <full-commit-hash>`, an I-D revision, or an RFC — or the literal `originates in this registry` for a convention with no external source. A branch or tag alone is not a pin; both can move after the fact.
 **Promoted by:** <Registry Editor ruling, date> — provisional entries omit this line
 
 <Semantic content: vocabulary, purpose, producer invariants, outcome
 conventions. NEVER a Digest Context table — that table lives at the
-Home-1 reference above and is cited, not copied.>
+Digest-context reference above and is cited, not copied.>
 ```
 
 An entry with no mechanical counterpart (e.g. a pack, a publisher
-namespace claim) omits the `Home-1 reference` line entirely — there is
-nothing to cite. The `Source` line is never omitted: an entry with no
+namespace claim) omits the `Digest-context reference` line entirely — there
+is nothing to cite. The `Source` line is never omitted: an entry with no
 external source declares `originates in this registry`, so every entry
-states its provenance either way. The `Home-1 reference`, when present,
-is an internal cross-link to CPB's digest-context content, not this
-provenance pin — the two are distinct lines.
+states its provenance either way. The `Digest-context reference`, when
+present, is an internal cross-link to the owning registry's digest-context
+content, not this provenance pin — the two are distinct lines.
 
 ---
 
