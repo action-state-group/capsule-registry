@@ -36,10 +36,10 @@ There are two registries in the Agent Action Capsule family, and they are
   canonicalization-algorithm/token material (its Canonicalization Algorithm
   Registry section is live and normative). It is **not** a valid citation
   target for artifact-type or digest-context material — under CPB-04 that
-  is profile-owned, and which document is the owning profile's normative
-  source for it is an open question, tracked as NEEDS-STEVEN and
-  coordinated with `[cpb-aac-entry-nonlive-repair]` Q1 so the two items
-  return the same answer. No meaning lives at Home-1 either way — only how
+  is profile-owned, and the owning profile's normative source for it is the
+  profile's own Internet-Draft — for agent-action-capsule, the AAC draft
+  itself (ruled 2026-09-15, with `[cpb-aac-entry-nonlive-repair]` Q1), not a
+  CPB or Home-2 registry. No meaning lives at Home-1 either way — only how
   bytes are turned into a digest.
 - **Home-2 — semantics (this repository).** Composition slot profiles,
   action-type and outcome conventions, cross-profile purpose labels, and the
@@ -57,9 +57,9 @@ resolves which home each part belongs to:
 > cited by reference, never duplicated, from whichever registry actually
 > owns it.** That is CPB's Home-1 Canonicalization Algorithm Registry for an
 > algorithm/token. For an artifact-type or digest-context declaration it is
-> the owning profile's own normative registry, since CPB-04 creates no
-> artifact-type registry of its own (see the Home-1 bullet above) —
-> currently an open question for which document that is. Everything else
+> the owning profile's own Internet-Draft, since CPB-04 creates no
+> artifact-type registry of its own (see the Home-1 bullet above) — for
+> agent-action-capsule, the AAC draft (ruled 2026-09-15). Everything else
 > that gives the entry's fields their agreed meaning — vocabulary, purpose,
 > producer invariants, outcome semantics — is Home-2 content and is
 > registered here, once an entry is promoted.
