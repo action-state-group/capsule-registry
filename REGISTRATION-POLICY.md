@@ -9,8 +9,9 @@ lifecycle. It does not yet accept registrations — see
 
 This policy covers Home-2 content only: composition slot profiles,
 action-type conventions, outcome conventions, cross-profile purpose labels,
-and the pack ecosystem (publishers, packs, fold envelopes, adapters). It
-never covers algorithms, digest contexts, or canonicalization profiles.
+the pack ecosystem (publishers, packs, fold envelopes, adapters), and
+policy-module profile ids. It never covers algorithms, digest contexts, or
+canonicalization profiles.
 Algorithm/canonicalization-token content is CPB's Home-1 policy (see
 [`scitt-payload-binding/REGISTRY.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/REGISTRY.md)
 for its live Canonicalization Algorithm Registry section); artifact-type and

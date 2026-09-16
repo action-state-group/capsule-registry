@@ -6,11 +6,13 @@
 Action Capsule (AAC) ecosystem — the record of what capsule fields and
 conventions *mean*, as opposed to how they are canonicalized and digested.
 
-> **Status.** Public, skeleton plus policy — **no entries yet**. This
-> repository holds the registry structure and registration policy; entries
-> arrive by per-entry ruling under [`REGISTRATION-POLICY.md`](REGISTRATION-POLICY.md),
-> not on a schedule. Nothing here should be read as the registry already
-> operating — it isn't, until its first entry is promoted.
+> **Status.** Public, skeleton plus policy, plus a first round of
+> `provisional` entries — **no entry is `promoted` yet**. This repository
+> holds the registry structure and registration policy; a `provisional`
+> entry proposes content, but registration is the per-entry ruling under
+> [`REGISTRATION-POLICY.md`](REGISTRATION-POLICY.md), not a schedule.
+> Nothing here should be read as the registry already operating — it
+> isn't, until its first entry is promoted.
 
 ## Two registry homes, split by layer
 
@@ -42,9 +44,10 @@ There are two registries in the Agent Action Capsule family, and they are
   CPB or Home-2 registry. No meaning lives at Home-1 either way — only how
   bytes are turned into a digest.
 - **Home-2 — semantics (this repository).** Composition slot profiles,
-  action-type and outcome conventions, cross-profile purpose labels, and the
-  pack ecosystem (publishers, packs, fold envelopes, adapters) that gives
-  capsule fields and compositions their agreed meaning.
+  action-type and outcome conventions, cross-profile purpose labels, the
+  pack ecosystem (publishers, packs, fold envelopes, adapters), and
+  policy-module profile ids, that give capsule fields and compositions
+  their agreed meaning.
 
 **The within-entry rule (law).** A single registry entry frequently has both
 kinds of content — for example, a proposed artifact type carries a
@@ -111,10 +114,12 @@ should disambiguate (e.g. titling this one for *composition & semantics
 conventions* rather than *capsule*) is flagged for Steven's call; this task
 does not rename anything.
 
-## No entries here yet
+## No CPB entries migrate here
 
 This repository is activation, not migration. No semantic content has moved
-from CPB's provisional registry into this repository. An entry that
+from CPB's provisional registry into this repository — a first-party entry
+(see `REGISTRY.md`) may still originate here directly, on its own
+provenance, which is a different question from migration. An entry that
 currently incubates whole in
 [`scitt-payload-binding/spec/cpb-provisional-registry.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/spec/cpb-provisional-registry.md)
 stays there, unsplit, until it receives its own promotion ruling — see
