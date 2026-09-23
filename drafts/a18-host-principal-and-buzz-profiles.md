@@ -57,7 +57,7 @@ example) — internal, unpublished as of this draft; not yet a commit-pinned pub
   line in Steven's ruling** — it is spec-desk-proposed, not found in either internal spec.
 
 **Does NOT assert (EvidenceBook v3 §9, §12, restated normatively for this entry):**
-- **Authority.** Key control is never authority (Evidence Contract v3 §3.1; EvidenceBook v3 §12).
+- **Not authority.** Key control is never authority (Evidence Contract v3 §3.1; EvidenceBook v3 §12).
   That a signature verifies against a `principal_ref` under this profile establishes only that the
   signer controlled the named private key at signing time — never that the key-holder was
   authorized to act in any community, role, or organizational capacity.
