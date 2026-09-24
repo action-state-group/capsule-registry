@@ -96,6 +96,21 @@ definitions (`publisher/name/semver`), fold envelope definitions, and
 adapter/implementation conformance listings. No publishers, packs, fold
 envelopes, or adapters are registered yet.
 
+**Naming note, ahead of the first entry.** A `pack_id` version constraint
+registered here (e.g. "publisher/name, at least 1.2.0") is a POLICY
+reference: it deliberately pins no historical bytes, and names a
+class of acceptable future versions instead. This is the opposite kind
+of fact from a `references` entry in the Agent Action Capsule profile's
+own wire format, which is an IDENTITY reference — a `{digest_alg,
+digest}` pair pinning one target's exact bytes (see
+`draft-mih-scitt-agent-action-capsule-05.md`, Cross-record references,
+"Identity references, never policy references"). A future pack
+registration MUST NOT be read as, or reused as, an identity reference,
+and a `references` entry MUST NOT be relaxed into a pack-style version
+constraint — the two stay in their own registries because they answer
+different questions: what was cited, versus what a runtime currently
+accepts.
+
 ---
 
 ## No entries migrate without a per-entry ruling
