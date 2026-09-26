@@ -38,7 +38,7 @@ There are two registries in the Agent Action Capsule family, and they are
   target for artifact-type or digest-context material — under CPB-04 that
   is profile-owned, and the owning profile's normative source for it is the
   profile's own Internet-Draft — for agent-action-capsule, the AAC draft
-  itself (ruled 2026-09-15, with `[cpb-aac-entry-nonlive-repair]` Q1), not a
+  itself (ruled 2026-09-15), not a
   CPB or Home-2 registry. No meaning lives at Home-1 either way — only how
   bytes are turned into a digest.
 - **Home-2 — semantics (this repository).** Composition slot profiles,
