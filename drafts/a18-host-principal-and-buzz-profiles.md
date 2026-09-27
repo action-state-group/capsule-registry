@@ -1,13 +1,28 @@
-# DRAFT — `nostr-pubkey` host-principal profile + first Buzz Evidence Contract profiles
+# `nostr-pubkey` host-principal profile + first Buzz Evidence Contract profiles
 
-**Status: DRAFT — staged, not a registered entry.** Task `[a18-nostr-pubkey-host-principal-and-buzz-profiles]`,
-Area 18 phase 0. Gate: **HUMANS-WRITE-FIRST** — the field sets and moderation-record semantics
-below are drafted by the spec desk from `evidence-contract-internal-spec-v3.md` §7 and
-`evidence-book-internal-spec-v3.md` §3/§12/§14/§18.1 (both internal, unpublished specs), per this
-task's instructions. **They carry no Steven ruling yet** and MUST NOT be read as registered,
-promoted, or otherwise reliable until that ruling lands. On ruling, either this file's content
-moves into `REGISTRY.md` under whatever section the ruling names (see the placement note below),
-or it is revised in place and re-staged.
+**Status: field sets ruled; staged, not yet a registered entry.** Task
+`[a18-nostr-pubkey-host-principal-and-buzz-profiles]`, Area 18 phase 0, finalized by
+`[a18-buzz-profiles-finalize-uniform-digest]`. Gate: **HUMANS-WRITE-FIRST** — the field sets and
+moderation-record semantics below were drafted by the spec desk from
+`evidence-contract-internal-spec-v3.md` §7 and `evidence-book-internal-spec-v3.md`
+§3/§12/§14/§18.1 (both internal, unpublished specs), per this task's instructions.
+
+**Steven ruled 2026-09-23 (quoted in full):** *"UNIFORM `semantic_digest`: the EvidenceRecord
+subject is `{event_id, semantic_digest}` for EVERY profile — NO per-profile digest names
+(`outcome_digest`/`content_digest`/`gate_digest` withdrawn). 'What kind' is carried by the
+profile id + epistemic types, never the field name. Extra digested facts go as NAMED digests in
+the record BODY/epistemic payload, never by renaming the subject digest. Rationale: uniform
+neutral verify surface (one field for every profile/connector; no special-casing)."* Applied
+throughout Entries 2–4 below.
+
+**What is still open.** This ruling settles the digest-naming question only. Two narrower items
+remain explicitly unruled, and are called out at their own point below rather than folded silently
+into "ruled": Entry 1's `relay_hint` field ("needs its own line in Steven's ruling") and the
+`minimum_assurance`/`retention_check` placeholder values in Entries 2–4's evidence requirements
+("Area 18 to confirm"). Registry **placement** — which reserved section, if any, these entries
+land in — is a separate, still-open decision, raised under `## Needs decision` in the `spec` lane
+outbox by the prior task and NOT resolved by this one. Until placement is ruled, this file stays a
+staged `drafts/` file, not a `REGISTRY.md` entry.
 
 ## Why this file, not `REGISTRY.md` directly
 
@@ -33,7 +48,8 @@ moment placement and field sets are both ruled.
 
 ## Entry 1 — `nostr-pubkey` (host-principal profile)
 
-**Status:** DRAFT (would be `provisional` once placed under a ruled section)
+**Status:** the `pubkey` field is settled; `relay_hint` is still open (see below). Would be
+`provisional` once placed under a ruled section.
 **Source:** `evidence-book-internal-spec-v3.md` §12 ("Host-principal model"), §18.1 (worked
 example) — internal, unpublished as of this draft; not yet a commit-pinned public reference.
 **Promoted by:** — (none yet)
@@ -81,8 +97,9 @@ Evidence Contract v3 §7 names these three profiles and states one paragraph of 
 explicitly deferring field sets: *"Names and one-paragraph intent only — field sets are Area 18's
 to define."* The field sets below are that deferred work, drafted from §7's intent paragraphs plus
 the worked-example conventions already ratified in that document's Appendix A (outcome / process +
-obligation / human_role shapes) and this task's inbox instructions. **None of the three is
-ratified; all three are DRAFT.**
+obligation / human_role shapes) and this task's inbox instructions. **The digest-naming shape of
+all three is now ruled** (uniform `semantic_digest`, Steven, 2026-09-23, quoted above); no other
+aspect of the field sets below carries a ruling beyond that.
 
 Common rules across all three (task boundary, restated normatively for every entry below):
 - **Key control is never authority** — every principal reference in these profiles is a
@@ -92,7 +109,13 @@ Common rules across all three (task boundary, restated normatively for every ent
   one.** A record MAY carry both (EvidenceBook v3 §14): `payload_commitments[].digest` (content
   identity, recomputable) and an external event reference (e.g. `external_event_refs[].event_id`,
   a specific transmission on the Nostr transport, not recomputable from bytes alone). A record
-  under any of these three profiles MUST NOT use one value to stand in for the other.
+  under any of these three profiles MUST NOT use one value to stand in for the other. Per Steven's
+  2026-09-23 ruling, every profile below names this same pair identically — `subject: {event_id,
+  semantic_digest}` — never a per-profile digest field name (`outcome_digest`/`content_digest`/
+  `gate_digest` are withdrawn). A digested fact beyond the subject's one `semantic_digest` (e.g. a
+  moderation decision alongside the content it was made over) is carried as a separate, NAMED
+  digest in the record's body/epistemic payload — never by adding a second field to `subject` or
+  renaming `semantic_digest` itself.
 - **No message text in any record — digests only.** No field on a record under any of these three
   profiles carries moderated content, job output, or release-note free text; every content
   reference is a `{digest_alg, digest}` pair.
@@ -101,7 +124,8 @@ Common rules across all three (task boundary, restated normatively for every ent
 
 ### Entry 2 — `buzz.agent-job/v1`
 
-**Status:** DRAFT
+**Status:** field set ruled (uniform `semantic_digest`, Steven, 2026-09-23); would be `provisional`
+once placed under a ruled section.
 **Source:** `evidence-contract-internal-spec-v3.md` §7 — internal, unpublished.
 **Promoted by:** — (none yet)
 
@@ -113,16 +137,25 @@ host-principal profile."*
 **Profile:** `outcome` (Evidence Contract v3 §3.2).
 
 **Subject shape:**
+
+Evidence Contract subject (population level; unchanged by this ruling):
 ```
 subject:
   job_type: "buzz.agent-job"
   population_selector: <host-defined — e.g. "agent jobs closed in evaluation_period">
-job_reference:
+```
+
+EvidenceRecord subject (Steven's 2026-09-23 uniform-digest ruling — the same two fields for every
+profile in this file; "what kind" is carried by `contract_ref` + `epistemic_type`, never by the
+field name):
+```
+subject:
   event_id: <Nostr event id of the job's terminal event — transport reference, §14>
-  outcome_digest: <SHA-256 digest of the canonical job-outcome payload — semantic digest, §14>
-  # event_id and outcome_digest are two REQUIRED, distinct fields. A conforming producer MUST NOT
+  semantic_digest: <SHA-256 digest of the canonical job-outcome payload — semantic digest, §14>
+  # event_id and semantic_digest are two REQUIRED, distinct fields. A conforming producer MUST NOT
   # emit a record where one field is reused for the other, and a conforming validator MUST reject
-  # one that does.
+  # one that does. NO per-profile digest name (e.g. "outcome_digest") is used here or in any
+  # sibling entry below — withdrawn by the 2026-09-23 ruling.
 ```
 
 **Evidence requirements (illustrative, mirrors Appendix A.1's outcome shape):**
@@ -141,7 +174,8 @@ agent-job outcome to an obligation, that binding is `obligation_refs` on the *co
 
 ### Entry 3 — `buzz.moderation/v1`
 
-**Status:** DRAFT
+**Status:** field set ruled (uniform `semantic_digest`, Steven, 2026-09-23); would be `provisional`
+once placed under a ruled section.
 **Source:** `evidence-contract-internal-spec-v3.md` §7 — internal, unpublished.
 **Promoted by:** — (none yet)
 
@@ -153,19 +187,45 @@ source')."*
 **Profile:** `human_role` / `process` blend (Evidence Contract v3 §3.4, §3.6).
 
 **Subject shape:**
+
+Evidence Contract subject (population level; unchanged by this ruling):
 ```
 subject:
   job_type: "buzz.moderation"
   population_selector: <host-defined — e.g. "moderation actions closed in evaluation_period">
-moderation_reference:
-  event_id: <Nostr event id of the moderated content/action — transport reference, §14>
-  content_digest: <SHA-256 digest of the moderated content/action's canonical bytes — semantic
-                    digest, §14; NEVER the content itself>
-  # event_id and content_digest are two REQUIRED, distinct fields — same distinctness rule as
-  # Entry 2's job_reference, restated here because moderation content is exactly the case where
-  # collapsing the two into one field would also leak the moderated text (task boundary: no
-  # message text in any record).
 ```
+
+EvidenceRecord subject (Steven's 2026-09-23 uniform-digest ruling — same shape as Entry 2's,
+`semantic_digest` here identifying the moderated content, never the moderation decision):
+```
+subject:
+  event_id: <Nostr event id of the moderated content/action — transport reference, §14>
+  semantic_digest: <SHA-256 digest of the moderated content/action's canonical bytes — semantic
+                     digest, §14; NEVER the content itself>
+  # event_id and semantic_digest are two REQUIRED, distinct fields — same distinctness rule as
+  # Entry 2's, restated here because moderation content is exactly the case where collapsing the
+  # two into one field would also leak the moderated text (task boundary: no message text in any
+  # record). NO per-profile digest name ("content_digest") is used — withdrawn by the ruling.
+```
+
+**Content vs. decision — two distinct digested facts, one `subject`.** A moderation record binds
+*what was moderated* (the content, identified by `subject.semantic_digest` above) and *what was
+decided about it* (the disposition in `judgment` below). Per the ruling, the decision does not get
+its own `subject` field or a renamed `semantic_digest` — it is a second, NAMED digest carried in
+the record's body/epistemic payload:
+```
+judgment:
+  disposition: "removed" | "labeled" | "no_action"
+  evaluator_model_ref: <...>
+  calibration_ref: <...>
+  decision_digest: <SHA-256 digest of the canonical disposition-and-provenance payload above —
+                     a BODY digest, named for what it is, never `subject.semantic_digest`>
+```
+One worked vector (`vectors/profiles/buzz.moderation/v1/positive-semantic-judgment.json` in
+`agent-action-capsule`) carries both: the record's own `payload_commitments[0]` (`role:
+"semantic_digest"`) is the wire realization of this entry's `subject.semantic_digest` for the
+moderated content, and `judgment.decision_digest` is the separate, named body digest for the
+decision — two digests, never one field standing in for both.
 
 **Required epistemic types — the three-part evidentiary basis this task's inbox names
 explicitly:**
@@ -174,7 +234,7 @@ A `buzz.moderation/v1` requirement's `accepted_epistemic_types` MUST include all
 1. **`SEMANTIC_JUDGMENT`** — the moderation determination itself (e.g. a disposition such as
    `removed` / `labeled` / `no_action`), carried with evaluator/model/version and calibration
    provenance per Evidence Contract v3 §3.6's rule for qualitative interpretation. Never the
-   moderated content — the determination only, plus the `content_digest` it was made over.
+   moderated content — the determination only, plus the `semantic_digest` it was made over.
 2. **`HUMAN_REPORT`** (review) — a human reviewer's own report over the determination (Evidence
    Contract v3 §3.6's `review: { rate, events }` shape), typed `HUMAN_REPORT` per v2 §7 (carried
    forward, Contract v3 §10): human experience/judgment measures never get typed as anything
@@ -208,7 +268,8 @@ restatement of an existing rule, not a new one this entry introduces.
 
 ### Entry 4 — `buzz.release/v1`
 
-**Status:** DRAFT
+**Status:** field set ruled (uniform `semantic_digest`, Steven, 2026-09-23); would be `provisional`
+once placed under a ruled section.
 **Source:** `evidence-contract-internal-spec-v3.md` §7 — internal, unpublished.
 **Promoted by:** — (none yet)
 
@@ -221,14 +282,23 @@ release."*
 Appendix A.2's dogfood change-control example directly, substituting the Buzz release subject.
 
 **Subject shape:**
+
+Evidence Contract subject (population level; unchanged by this ruling):
 ```
 subject:
   job_type: "buzz.release"
   population_selector: <host-defined — e.g. "releases shipped in evaluation_period">
-release_reference:
+```
+
+EvidenceRecord subject (Steven's 2026-09-23 uniform-digest ruling — same shape as Entries 2 and 3;
+the release's separate approval-record digest is a NAMED body digest on `payload_commitments`, not
+a second subject field — see the worked vectors):
+```
+subject:
   event_id: <Nostr event id of the release-gate event — transport reference, §14>
-  gate_digest: <SHA-256 digest of the canonical release-gate record — semantic digest, §14>
-  # same two-field distinctness rule as Entries 2 and 3.
+  semantic_digest: <SHA-256 digest of the canonical release-gate record — semantic digest, §14>
+  # same two-field distinctness rule as Entries 2 and 3. NO per-profile digest name
+  # ("gate_digest") is used — withdrawn by the 2026-09-23 ruling.
 ```
 
 **Requirements (mirrors Appendix A.2's two-requirement shape):**
