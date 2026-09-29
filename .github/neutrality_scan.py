@@ -2,13 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 """Neutrality gate — fail the build if reserved vocabulary appears in this repo.
 
-This repository (`capsule-registry`) is a neutral public surface — the Home-2
-semantics registry for the Agent Action Capsule ecosystem. A small set of
-concepts is reserved and must not appear here. The reserved list is
-deliberately NOT stored in this repository — a public gate that enumerated
-the terms would itself disclose them. Instead the list is supplied at run
-time via the ``NEUTRALITY_TERMS`` repository secret, and this script is pure
-matching logic parameterized by that secret.
+This repository is a neutral public surface. A small set of concepts is
+reserved and must not appear here. The reserved list is deliberately NOT stored
+in this repository — a public gate that enumerated the terms would itself
+disclose them. Instead the list is supplied at run time via the
+``NEUTRALITY_TERMS`` repository secret, and this script is pure matching logic
+parameterized by that secret.
 
 Fail-closed: if the secret is absent/empty the gate errors (exit 2) rather than
 passing silently — a missing list must never read as "clean".
@@ -22,6 +21,11 @@ Secret schema (JSON):
                   match is exempt ONLY when it falls inside the span of such a
                   phrase on the same line — not every occurrence of the token on
                   the line (two-occurrence fix: track spans, not just presence).
+
+Reading: only regular files inside the scanned root are read. A path whose
+own name or any parent directory is a symbolic link, or that resolves outside
+the root, is skipped and never opened. The root is untrusted content on a fork
+run, and a link could otherwise point the scanner at a file outside it.
 
 Output redaction: matched terms are NOT printed unless ``NEUTRALITY_REVEAL`` is
 set to a truthy value. Redacted output keeps file:line and a per-line hit count.
@@ -40,14 +44,15 @@ import os
 import contextlib
 import io
 import re
+import stat
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
 SCAN_SUFFIXES = (
-    ".html", ".py", ".go", ".md", ".rst", ".txt", ".xml", ".toml", ".cfg",
-    ".yml", ".yaml", ".json",
+    ".html", ".py", ".go", ".rs", ".md", ".rst", ".txt", ".xml", ".toml",
+    ".cfg", ".yml", ".yaml", ".json",
 )
 
 
@@ -63,9 +68,21 @@ def _load_config() -> tuple[re.Pattern[str], tuple[str, ...]]:
         raise SystemExit(2)
     try:
         cfg = json.loads(raw)
+        if isinstance(cfg, str):
+            # Some secret-setting paths double-encode the JSON (the secret's
+            # raw value is a JSON string literal containing the real object).
+            # One extra decode recovers the intended dict; anything else past
+            # that is a genuine config error, not a shape we paper over.
+            cfg = json.loads(cfg)
     except json.JSONDecodeError as exc:
         print(f"error: NEUTRALITY_TERMS is not valid JSON: {exc}", file=sys.stderr)
         raise SystemExit(2) from exc
+    if not isinstance(cfg, dict):
+        print(
+            f"error: NEUTRALITY_TERMS must decode to a JSON object, got {type(cfg).__name__}.",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
     substring = tuple(cfg.get("substring", ()))
     word = tuple(cfg.get("word", ()))
     allow = tuple(p.lower() for p in cfg.get("allow_phrases", ()))
@@ -138,6 +155,45 @@ def _git_tracked_files(root: Path) -> list[Path] | None:
     return [root / f for f in r.stdout.splitlines() if f]
 
 
+def _read_regular_file(root: Path, path: Path) -> str | None:
+    """The text of *path* when it is safe to read, else ``None``.
+
+    Safe means: no component from *root* down to *path* is a symbolic link, the
+    resolved path is inside the resolved *root*, and it is a regular file. The
+    file is opened without following a link at its last component, and checked
+    again after opening, so a link swapped in after the checks is not followed
+    either.
+    """
+    try:
+        rel = path.relative_to(root)
+    except ValueError:
+        return None
+    current = root
+    for part in rel.parts:
+        current = current / part
+        if current.is_symlink():
+            return None
+    try:
+        if not path.resolve().is_relative_to(root.resolve()):
+            return None
+        if not stat.S_ISREG(path.lstat().st_mode):
+            return None
+        fd = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0))
+    except OSError:
+        return None
+    try:
+        if not stat.S_ISREG(os.fstat(fd).st_mode):
+            return None
+        with os.fdopen(fd, "rb") as fh:
+            fd = -1
+            return fh.read().decode("utf-8", errors="replace")
+    except OSError:
+        return None
+    finally:
+        if fd >= 0:
+            os.close(fd)
+
+
 def _reveal_matches() -> bool:
     """Whether matched terms may be printed verbatim.
 
@@ -182,13 +238,10 @@ def scan(
     offenders: list[str] = []
     for path in candidates:
         path = Path(path)
-        if not path.is_file() or path.suffix.lower() not in SCAN_SUFFIXES:
+        if path.suffix.lower() not in SCAN_SUFFIXES or ".git/" in str(path):
             continue
-        if ".git/" in str(path):
-            continue
-        try:
-            text = path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
+        text = _read_regular_file(root, path)
+        if text is None:
             continue
         text = _strip_generated_comments(text)
         for i, line in enumerate(text.splitlines(), 1):
@@ -403,13 +456,61 @@ def _run_self_tests() -> None:
             else:
                 os.environ["NEUTRALITY_TERMS"] = prior_terms
 
+    # Links are never followed: a link to a file outside the root, a linked
+    # directory, and a real directory reached through a linked parent are all
+    # skipped, and the outside file's text never reaches the output. Checked
+    # both on a plain tree and as tracked files in a git checkout (the path a
+    # CI run takes).
+    if hasattr(os, "symlink"):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            outside = base / "outside"
+            outside.mkdir()
+            (outside / "secret.md").write_text(f"{secret_term}\n", encoding="utf-8")
+            troot = base / "root"
+            troot.mkdir()
+            (troot / "clean.md").write_text("clean\n", encoding="utf-8")
+            os.symlink(outside / "secret.md", troot / "link.md")
+            os.symlink(outside, troot / "linked-dir")
+            (outside / "sub").mkdir()
+            (outside / "sub" / "deep.md").write_text(f"{secret_term}\n", encoding="utf-8")
+            if _read_regular_file(troot, troot / "link.md") is not None:
+                errors.append("symlink test failed: a link to a file outside the root was read")
+            if _read_regular_file(troot, troot / "linked-dir" / "secret.md") is not None:
+                errors.append("symlink test failed: a file under a linked directory was read")
+            if _read_regular_file(troot, troot / "linked-dir" / "sub" / "deep.md") is not None:
+                errors.append("symlink test failed: a file under a linked parent was read")
+            found = scan(troot, pattern3, (), reveal=True)
+            if found:
+                errors.append(f"symlink test failed: the plain-tree scan read through a link: {found!r}")
+            if subprocess.run(["git", "--version"], capture_output=True).returncode == 0:
+                git = ["git", "-c", "user.name=t", "-c", "user.email=t@t", "-C", str(troot)]
+                subprocess.run(git + ["init", "-q"], check=True)
+                subprocess.run(git + ["add", "-A"], check=True)
+                subprocess.run(git + ["commit", "-q", "-m", "t"], check=True)
+                tracked = subprocess.run(git + ["ls-files"], capture_output=True, text=True).stdout
+                if "link.md" not in tracked:
+                    errors.append("symlink test setup failed: the link is not a tracked file")
+                found = scan(troot, pattern3, (), reveal=True)
+                if found:
+                    errors.append(f"symlink test failed: the git-tracked scan read through a link: {found!r}")
+            (troot / "inner").mkdir()
+            (troot / "inner" / "real.md").write_text("inside\n", encoding="utf-8")
+            os.symlink(troot / "inner", troot / "inner-link")
+            if _read_regular_file(troot, troot / "inner-link" / "real.md") is not None:
+                errors.append("symlink test failed: a path through a linked directory inside the root was read")
+            if _read_regular_file(troot, troot / "inner" / "real.md") != "inside\n":
+                errors.append("symlink test failed: the same file by its real path was not read")
+            if _read_regular_file(troot, troot / "clean.md") != "clean\n":
+                errors.append("symlink test failed: a regular file inside the root was not read")
+
     if errors:
         print("NEUTRALITY SELF-TEST FAILURES:")
         for e in errors:
             print(f"  {e}")
         raise SystemExit(1)
 
-    print("neutrality self-test: OK (span-based allow-phrase exemption)")
+    print("neutrality self-test: OK (span-based allow-phrase exemption; no links followed; redacted by default)")
 
 
 def main(argv: list[str] | None = None) -> int:
