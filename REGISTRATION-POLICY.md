@@ -9,15 +9,17 @@ lifecycle. It does not yet accept registrations — see
 
 This policy covers Home-2 content only: composition slot profiles,
 action-type conventions, outcome conventions, cross-profile purpose labels,
-and the pack ecosystem (publishers, packs, fold envelopes, adapters). It
+host-principal schemes, and the pack ecosystem (publishers, packs, fold
+envelopes, adapters). It
 never covers algorithms, digest contexts, or canonicalization profiles.
 Algorithm/canonicalization-token content is CPB's Home-1 policy (see
 [`scitt-payload-binding/REGISTRY.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/REGISTRY.md)
 for its live Canonicalization Algorithm Registry section); artifact-type and
-digest-context content is profile-owned under CPB-04 and its citation
-target is not yet settled — see
+digest-context content is profile-owned under CPB-04, and its normative
+source is the owning profile's own Internet-Draft (for agent-action-capsule,
+the AAC draft itself, ruled 2026-09-15). See
 [`README.md`](README.md#two-registry-homes-split-by-layer) for the full
-restatement and the open NEEDS-STEVEN.
+restatement.
 
 For why this registry exists as a **third** home distinct from CPB's Home-1
 and from the Agent Action Capsule profile's own `spec/REGISTRY.md`, see

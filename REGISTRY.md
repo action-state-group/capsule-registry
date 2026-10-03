@@ -12,9 +12,11 @@ material is CPB's Home-1 registry, in
 [`scitt-payload-binding/REGISTRY.md`](https://github.com/action-state-group/scitt-payload-binding/blob/main/REGISTRY.md)
 (its live Canonicalization Algorithm Registry section). Artifact-type and
 digest-context material is, under CPB-04, profile-owned rather than a CPB
-registry — its citation target is not yet settled; see
+registry. Its normative source is the owning profile's own
+Internet-Draft; for agent-action-capsule that is the AAC draft itself
+(ruled 2026-09-15). See
 [`README.md`](README.md#two-registry-homes-split-by-layer) for the full
-restatement and the open NEEDS-STEVEN.
+restatement.
 
 ## Entry format — the within-entry rule
 
@@ -88,6 +90,16 @@ Reserved for the shared vocabulary of purpose labels used across composition
 profiles at the WHAT slot's self-reference binding, so that a purpose label
 means the same thing regardless of which profile emitted it. No labels are
 registered yet.
+
+### Host-Principal Schemes
+
+Reserved for the schemes a `principal_ref` value can use to name the holder
+of a key (for example `nostr-pubkey`), and what each scheme does and does
+not establish. A host-principal scheme is an identity binding, never an
+authorization: it is distinct from the composition model's WHO slot, which
+records named-human authorization before execution. No schemes are
+registered yet; the first candidate is staged in
+[`drafts/a18-host-principal-and-nostr-host-profiles.md`](drafts/a18-host-principal-and-nostr-host-profiles.md).
 
 ### Pack Schema & `pack_id` Namespace
 

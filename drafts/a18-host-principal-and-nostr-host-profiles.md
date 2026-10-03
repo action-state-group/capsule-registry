@@ -1,4 +1,10 @@
-# `nostr-pubkey` host-principal profile + first Buzz Evidence Contract profiles
+# `nostr-pubkey` host-principal profile + three Evidence Contract profiles for Nostr-based agent hosts
+
+**About the name Buzz in this file.** These profiles are written by the Registry Editor for
+agent hosts that run over the Nostr transport. The open-source Buzz project is used as the
+reference example of such a host, because its job, moderation and release flows are public. The
+profiles are not adopted, endorsed, or used by the Buzz project, and nothing here describes Buzz's
+own practices. Profile ids use the neutral `nostr-host.` prefix for that reason.
 
 **Status: field sets ruled; staged, not yet a registered entry.** The field sets and
 moderation-record semantics below were drafted from Evidence Contract v3 §7 and EvidenceBook v3
@@ -21,9 +27,9 @@ Applied throughout Entries 2–4 below: every record under every profile here ca
 - Entry 1's `relay_hint` companion field — proposed by this draft, not yet ruled.
 - The `minimum_assurance` / `retention_check` placeholder values in Entries 2–4's evidence
   requirements — placeholders, to be confirmed.
-- Registry **placement** — which reserved section, if any, these entries land in (see the next
-  section). Until placement is ruled, this file stays a staged `drafts/` file, not a
-  `REGISTRY.md` entry.
+- Registry **placement** for Entries 2–4. Entry 1 now has a reserved home, `REGISTRY.md`
+  "Host-Principal Schemes". Entries 2–4 stay staged here until the Evidence Contract
+  specification they cite is published, since a registry entry needs a pinned source.
 
 ## Why this file, not `REGISTRY.md` directly
 
@@ -59,7 +65,7 @@ published; not yet a commit-pinned public reference.
 
 **Carries:**
 - `pubkey` (required) — a Nostr public key (secp256k1 / BIP-340 Schnorr), the same identity
-  primitive Buzz/mesh nodes already use for discovery (EvidenceBook v3 §13, §18.1). Wire encoding:
+  primitive Nostr clients and relays use for discovery (EvidenceBook v3 §13, §18.1). Wire encoding:
   64-char lowercase hex (the raw x-only public key). A `bech32` `npub` string is a display
   encoding only and is never the wire value this profile registers.
 - `relay_hint` (optional) — **new field proposed by this draft, not present in EvidenceBook v3
@@ -78,7 +84,7 @@ published; not yet a commit-pinned public reference.
   signer controlled the named private key at signing time — never that the key-holder was
   authorized to act in any community, role, or organizational capacity.
 - **Any community/role authority-context binding.** Such a binding (e.g. "this pubkey moderates
-  this Buzz community") is a separate, host-managed mapping, referenced if at all via
+  this community") is a separate, host-managed mapping, referenced if at all via
   `actor_role_ref` or `counterparty_ref` on the record header — never inferred from `principal_ref`
   alone (EvidenceBook v3 §12).
 - **Continuity of the person/agent behind the key across time.** A principal may rotate keys; this
@@ -91,7 +97,7 @@ means, per the within-entry rule.
 
 ---
 
-## Entries 2–4 — first Buzz Evidence Contract profiles (Evidence Contract v3 §7)
+## Entries 2–4 — Evidence Contract profiles for Nostr-based agent hosts (Evidence Contract v3 §7)
 
 Evidence Contract v3 §7 names these three profiles and states one paragraph of intent each,
 explicitly deferring field sets to the profile work. The field sets below are that deferred work,
@@ -105,7 +111,7 @@ Common rules across all three (restated normatively for every entry below):
   `nostr-pubkey` `principal_ref` (Entry 1) and inherits that entry's "does NOT assert" list in
   full.
 - **One uniform subject: `subject: {event_id, semantic_digest}` — the same two fields, with the
-  same names, under every profile.** `event_id` is the Buzz transport event id (a specific
+  same names, under every profile.** `event_id` is the host's Nostr transport event id (a specific
   transmission on the Nostr transport, not recomputable from bytes alone; EvidenceBook v3 §14).
   `semantic_digest` is the content identity of that event's payload (recomputable). They are kept
   DISTINCT — two REQUIRED fields, never one: a conforming producer MUST NOT emit a record where one
@@ -126,17 +132,17 @@ Common rules across all three (restated normatively for every entry below):
 - **No per-user history and no scores.** No field aggregates a principal's history across records,
   and no field carries a numeric score or rating of any kind.
 
-### Entry 2 — `buzz.agent-job/v1`
+### Entry 2 — `nostr-host.agent-job/v1`
 
 **Status:** subject shape ruled (uniform `semantic_digest`, 2026-09-23); would be `provisional`
 once placed under a ruled section.
 **Source:** Evidence Contract v3 §7 — not yet published.
 **Promoted by:** — (none yet)
 
-**Intent (§7, quoted):** *"an outcome-profile contract over a Buzz agent job: did the job produce
-the required effect, evaluated against Buzz-native evidence (Nostr event refs, agent-job records)
-rather than an Action-State-native capsule. First concrete consumer of the `nostr-pubkey`
-host-principal profile."*
+**Intent (paraphrased from Evidence Contract v3 §7):** An outcome-profile contract over an agent job on a Nostr-based host: did the job produce
+the required effect, evaluated against host-native evidence (Nostr event refs, agent-job records)
+rather than a Capsule. First concrete consumer of the `nostr-pubkey`
+host-principal profile.
 
 **Profile:** `outcome` (Evidence Contract v3 §3.2).
 
@@ -145,7 +151,7 @@ host-principal profile."*
 Evidence Contract subject (population level; unchanged by this ruling):
 ```
 subject:
-  job_type: "buzz.agent-job"
+  job_type: "nostr-host.agent-job"
   population_selector: <host-defined — e.g. "agent jobs closed in evaluation_period">
 ```
 
@@ -161,7 +167,7 @@ subject:
 ```
 evidence_requirements:
   accepted_epistemic_types: [OBSERVED_EVENT, SYSTEM_OF_RECORD_FACT]
-  required_sources: [buzz-agent-job-record, nostr-event-log]
+  required_sources: [host-agent-job-record, nostr-event-log]
   minimum_assurance: [self-attested]   # UNRULED placeholder — to confirm whether a stronger floor applies
   coverage: "all closed agent jobs in population"
 ```
@@ -171,17 +177,16 @@ not, by itself, evidence toward a named regulatory obligation. If a specific dep
 agent-job outcome to an obligation, that binding is `obligation_refs` on the *contract*
 (Evidence Contract v3 §3.1), stated by that deployment, not by this profile entry.
 
-### Entry 3 — `buzz.moderation/v1`
+### Entry 3 — `nostr-host.moderation/v1`
 
 **Status:** subject shape ruled (uniform `semantic_digest`, 2026-09-23); would be `provisional`
 once placed under a ruled section.
 **Source:** Evidence Contract v3 §7 — not yet published.
 **Promoted by:** — (none yet)
 
-**Intent (§7, quoted):** *"a human_role/process blend: what moderation review, override, or
+**Intent (paraphrased from Evidence Contract v3 §7):** A human_role/process blend: what moderation review, override, or
 escalation occurred over a piece of content or an agent action, and whether the required
-moderation step was followed. Buzz's own judgment source (fabric v3 §17, 'Mesh judgment
-source')."*
+moderation step was followed. The host's own judgment source is one input.
 
 **Profile:** `human_role` / `process` blend (Evidence Contract v3 §3.4, §3.6).
 
@@ -190,7 +195,7 @@ source')."*
 Evidence Contract subject (population level; unchanged by this ruling):
 ```
 subject:
-  job_type: "buzz.moderation"
+  job_type: "nostr-host.moderation"
   population_selector: <host-defined — e.g. "moderation actions closed in evaluation_period">
 ```
 
@@ -222,13 +227,13 @@ judgment:
 Collapsing the content digest into `subject`, or the transport id into either digest, is exactly
 the case that would also leak the moderated text through a mis-typed field; keeping every fact
 named and distinct is what makes the "digests only" rule checkable. One worked vector
-(`vectors/profiles/buzz.moderation/v1/positive-semantic-judgment.json` in `agent-action-capsule`)
+(`vectors/profiles/buzz.moderation/v1/positive-semantic-judgment.json` in `agent-action-capsule`, to be regenerated under the `nostr-host.moderation` id)
 carries all three: `subject.{event_id, semantic_digest}` for the moderation action, and the
 `moderated-content` + `moderation-decision` body digests.
 
 **Required epistemic types — the three-part evidentiary basis:**
 
-A `buzz.moderation/v1` requirement's `accepted_epistemic_types` MUST include all three of:
+A `nostr-host.moderation/v1` requirement's `accepted_epistemic_types` MUST include all three of:
 1. **`SEMANTIC_JUDGMENT`** — the moderation determination itself (e.g. a disposition such as
    `removed` / `labeled` / `no_action`), carried with evaluator/model/version and calibration
    provenance per Evidence Contract v3 §3.6's rule for qualitative interpretation. Never the
@@ -243,13 +248,13 @@ A `buzz.moderation/v1` requirement's `accepted_epistemic_types` MUST include all
    (Contract v3 §3.3, §9).
 
 A record satisfying only one or two of the three types is `INSUFFICIENT` sufficiency for a
-`buzz.moderation/v1` requirement that names all three as required — this profile's evidentiary
+`nostr-host.moderation/v1` requirement that names all three as required — this profile's evidentiary
 basis is the combination, not any single record.
 
 ```
 evidence_requirements:
   accepted_epistemic_types: [SEMANTIC_JUDGMENT, HUMAN_REPORT, OBLIGATION_REFERENCE]
-  required_sources: [buzz-moderation-judgment-record, buzz-moderator-review-record, obligation-register]
+  required_sources: [host-moderation-judgment-record, host-moderator-review-record, obligation-register]
   minimum_assurance: [self-attested]   # UNRULED placeholder — to confirm
 ```
 
@@ -260,32 +265,32 @@ obligation_refs:
   - "dsa:article-17"      # statement-of-reasons obligation for a content-moderation decision
   - "dsa:article-24-5"    # transparency-database reporting obligation
 ```
-Per Evidence Contract v3 §9 (carried from v2 §6, unchanged): a `buzz.moderation/v1` result reports
+Per Evidence Contract v3 §9 (carried from v2 §6, unchanged): a `nostr-host.moderation/v1` result reports
 that supporting evidence for either obligation reference is present, missing, insufficient,
 contradicted, stale, or withheld. **It MUST NOT report either as "compliant."** This is a
 restatement of an existing rule, not a new one this entry introduces.
 
-### Entry 4 — `buzz.release/v1`
+### Entry 4 — `nostr-host.release/v1`
 
 **Status:** subject shape ruled (uniform `semantic_digest`, 2026-09-23); would be `provisional`
 once placed under a ruled section.
 **Source:** Evidence Contract v3 §7 — not yet published.
 **Promoted by:** — (none yet)
 
-**Intent (§7, quoted):** *"an obligation/process blend: whether a required release-control step
+**Intent (paraphrased from Evidence Contract v3 §7):** An obligation/process blend: whether a required release-control step
 (review, approval, staged rollout gate) was evidenced before a change went live. Same shape as the
-dogfood change-control example in §2 [Appendix A.2 in the current draft], applied to a Buzz
-release."*
+dogfood change-control example in §2 [Appendix A.2 in the current draft], applied to a host's
+release.
 
 **Profile:** `process` / `obligation` blend (Evidence Contract v3 §3.3, §3.4) — field shape mirrors
-Appendix A.2's dogfood change-control example directly, substituting the Buzz release subject.
+Appendix A.2's dogfood change-control example directly, substituting the host's release subject.
 
 **Subject shape:**
 
 Evidence Contract subject (population level; unchanged by this ruling):
 ```
 subject:
-  job_type: "buzz.release"
+  job_type: "nostr-host.release"
   population_selector: <host-defined — e.g. "releases shipped in evaluation_period">
 ```
 
@@ -308,18 +313,18 @@ requirements:
     approvals: ["at least one non-author reviewer"]
     evidence_requirements:
       accepted_epistemic_types: [OBSERVED_EVENT, SYSTEM_OF_RECORD_FACT]
-      required_sources: [ buzz-release-gate-record ]
+      required_sources: [ host-release-gate-record ]
   - id: req-obligation-1
     profile: obligation
     statement: "the release-control policy's review-before-rollout control was evidenced"
-    clause_ref: <host-defined release-control policy ref, e.g. "buzz-internal-release-policy/section-2/v1">
+    clause_ref: <host-defined release-control policy ref, e.g. "host-release-policy/section-2/v1">
     evidence_requirements:
       accepted_epistemic_types: [OBSERVED_EVENT]
-      required_sources: [ buzz-release-gate-record ]
+      required_sources: [ host-release-gate-record ]
     retention_check: "release-gate events retained for evaluation_period + P1Y"   # UNRULED placeholder value
 ```
 
-**Obligation refs — where real:** unlike `buzz.moderation/v1`, no DSA article is named for
+**Obligation refs — where real:** unlike `nostr-host.moderation/v1`, no DSA article is named for
 release-control in Evidence Contract v3 §7's intent paragraph. `clause_ref` above is a host-defined
 internal release-control policy reference (mirroring Appendix A.2's
 `internal-change-control-policy/section-3/v2`), not a named external regulatory obligation. If a
@@ -335,11 +340,11 @@ by that deployment, not invented here.
   Evidence Contract, human reports, semantic judgments, attribution, settlement, or disclosure
   policy" and §7 states a host-principal binding does not change which CLL a record lands in
   (custody) versus which `principal_ref` it carries (identity) — the two stay independent, and
-  neither the `nostr-pubkey` profile nor the three Buzz profiles above touch CLL's append/MMR/
+  neither the `nostr-pubkey` profile nor the three host profiles above touch CLL's append/MMR/
   checkpoint/witness algorithms at all.
 - **Composition** (`agent-accountability-composition`): checked directly against the WHO slot's
   named-human-authorization definition (see the placement note above) — `nostr-pubkey` is an
-  identity binding, not a pre-execution authorization receipt, and the three Buzz profiles are
+  identity binding, not a pre-execution authorization receipt, and the three host profiles are
   Evidence Contract requirement profiles, not composition slots. No composition relation is
   extended or introduced by this draft.
 
