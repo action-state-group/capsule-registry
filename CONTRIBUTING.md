@@ -69,3 +69,7 @@ underlying Agent Action Capsule profile is discussed against
 [`agent-action-capsule`](https://github.com/action-state-group/agent-action-capsule)
 and, for the SCITT/COSE substrate, the IETF **SCITT** Working Group
 (`scitt@ietf.org`).
+
+## Before every push
+
+Run `scripts/check.sh` (about 1 s on an Apple-silicon Mac). It runs what CI runs on pull requests and main, except the DCO sign-off check and the neutrality term scan, which needs the `NEUTRALITY_TERMS` secret (the scanner's self-test runs).
